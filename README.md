@@ -29,7 +29,7 @@ var merchantId = 'DEMO'; // you should change this.
 
 Demo
 ====
-Coming Soon
+https://secure.ultracart.com/merchant/integrationcenter/my_account_demo/index.html
 
 MyAccount REST API
 ==================
