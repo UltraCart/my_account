@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html"> <!-- Set this to the main language of your site -->
+<head>
+  <meta charset="utf-8">
+  <title>My Reviews- My Account</title>
+  <meta name="description" content="Manage Product Reviews">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="css/normalize.css" rel="stylesheet" media="all">
+  <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+  <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+
+  <link href="css/styles.css" rel="stylesheet" media="all">
+  <!--[if lt IE 9]>
+  <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+  <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+  <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="js/moment.js"></script>
+  <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+  <script type="text/javascript" src="js/underscore_1.4.4.js"></script>
+  <script type="text/javascript" src="js/backbone_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount_rest_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount.js"></script>
+  <script type="text/javascript" src="reviews.js"></script>
+
+
+  <script type="text/template" id="reviewed-template">
+    <table class="review-details {{#if featured}}featured{{/if}}">
+      <tr>
+        <td style='text-align:center;width:65px;'>
+          {{#if item.defaultImageUrl}}<img class='order-item-thumbnail' src="{{item.defaultImageUrl}}" alt=''/>{{/if}}
+        </td>
+        <td>
+          <div class='review-line-item'><a href="{{item.viewUrl}}">{{item.description}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{dateFormat submittedDate}}</div>
+          <div class='review-line-item'><strong>{{title}}</strong></div>
+          <br>
+          Ratings:
+          <table class='review-individual-ratings'>
+            <tr><td class='rating-name'><strong>Overall</strong></td><td><img src="images/spacer.gif" class="stars-{{overall}}"/></td></tr>
+            <tr><td colspan='2'>&nbsp;</td></tr>
+          {{#if ratingName1}}<tr><td class='rating-name'>{{ratingName1}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore1}}"/></td></tr>{{/if}}
+            {{#if ratingName2}}<tr><td class='rating-name'>{{ratingName2}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore2}}"/></td></tr>{{/if}}
+            {{#if ratingName3}}<tr><td class='rating-name'>{{ratingName3}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore3}}"/></td></tr>{{/if}}
+            {{#if ratingName4}}<tr><td class='rating-name'>{{ratingName4}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore4}}"/></td></tr>{{/if}}
+            {{#if ratingName5}}<tr><td class='rating-name'>{{ratingName5}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore5}}"/></td></tr>{{/if}}
+            {{#if ratingName6}}<tr><td class='rating-name'>{{ratingName6}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore6}}"/></td></tr>{{/if}}
+            {{#if ratingName7}}<tr><td class='rating-name'>{{ratingName7}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore7}}"/></td></tr>{{/if}}
+            {{#if ratingName8}}<tr><td class='rating-name'>{{ratingName8}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore8}}"/></td></tr>{{/if}}
+            {{#if ratingName9}}<tr><td class='rating-name'>{{ratingName9}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore9}}"/></td></tr>{{/if}}
+            {{#if ratingName10}}<tr><td class='rating-name'>{{ratingName10}}</td><td><img src="images/spacer.gif" class="stars-{{ratingScore10}}"/></td></tr>{{/if}}
+          </table>
+
+          <br>
+          <strong>Review</strong>
+          <div>{{review}}</div>
+
+          {{#if storeFeedback}}
+            <br>
+            <div>{{storeFeedback}}</div>
+          {{/if}}
+
+          <br>
+          <div>Was this review helpful?&nbsp;&nbsp;<span class='disabled-looking'>|</span>&nbsp;&nbsp;Yes {{helpfulYesVotes}}&nbsp;&nbsp;<span class='disabled-looking'>|</span>&nbsp;&nbsp;No {{helpfulNoVotes}}&nbsp;&nbsp;<span class='disabled-looking'>|</span></div>
+
+
+        </td>
+      </tr>
+    </table>
+  </script>
+
+  <script type="text/template" id="not-reviewed-yet-template">
+    <table class='not-reviewed-yet-details'>
+      <tr>
+        <td>
+          <input type="button" value="Review" class='reviewButton'/>
+        </td>
+        <td style='text-align:center;width:65px;'>
+          {{#if item.defaultImageUrl}}<img class='order-item-thumbnail' src="{{item.defaultImageUrl}}" alt=''/>{{/if}}
+        </td>
+        <td><a href="{{item.viewUrl}}">{{item.description}}</a></td>
+      </tr>
+    </table>
+  </script>
+
+
+</head>
+<body>
+
+<!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
+<!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
+<header role="banner">
+  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+
+  <h2>UltraCart Store</h2>
+  <h4><a href="index.html">My Account</a> &gt; <span class='disabled-looking'>My Reviews</span></h4>
+</header>
+
+<div class="wrap content">
+  <div>
+    <span class="info"></span>
+    <span class="success"></span>
+    <span class="warning"></span>
+    <span class="error"></span>
+  </div>
+
+
+  <div id="not-reviewed-yet">
+    <h4>Review Your Purchases</h4>
+    <div class='reviews'></div>
+
+
+    <div style='clear:both'></div>
+    <div class='load-more'>
+      <input type="button" id="loadMoreNotReviewedYetButton" value="Show 5 More Items"/>
+    </div>
+    <div class='loading'>
+      Please wait. We're loading your purchased items now.<br>
+      <img src='images/jquery.smallhbar.indicator.gif'/>
+    </div>
+  </div>
+
+
+  <div id="reviewed">
+    <h4>Your Published Reviews</h4>
+    <div class='reviews'></div>
+
+    <div style='clear:both'></div>
+    <div class='loading'>
+      Please wait. We're loading your reviews now.<br>
+      <img src='images/jquery.smallhbar.indicator.gif'/>
+    </div>
+    <div class='load-more'>
+      <input type="button" id="loadMoreReviewsButton" value="Show 5 More Reviews"/>
+    </div>
+
+  </div>
+
+</div>
+
+
+<footer role="contentinfo">
+  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2013' is a date -->
+  <small>Copyright www.ultracart.com &copy;
+    <time datetime="2013">2013</time>
+  </small>
+</footer>
+
+<!-- Google Analytics - Optimized version by Mathias Bynens -->
+<!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
+<!-- Change the UA-XXXX-XX string to your site's ID -->
+<script type='text/javascript'>
+  var _gaq = [
+    ['_setAccount', 'UA-XXXX-XX'],
+    ['_trackPageview']
+  ];
+  (function (a, b) {
+    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+    d.parentNode.insertBefore(c, d)
+  })(document, "script");
+</script>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+.emptyField
+{
+	display: none;
+}
+.label
+{
+	font-weight: bold;
+	text-align: right;
+}
+.header, .itemTableHeader
+{
+	background-color: #333;
+	color: #FFF;
+	font-weight: bold;
+	margin-bottom: 5px;
+	padding: 2px;
+	width: 640px;
+}
+.head-room, .itemTableHeader
+{
+	margin-top: 20px;
+}
+.itemTableHeaderRow td
+{
+	padding: 0;
+}
+.billto-header, .shipto-header
+{
+	font-weight: bold;
+	text-align: right;
+}
+.wrapper
+{
+	border: 1px solid black;
+	padding: 5px;
+}
+.instructions
+{
+	margin-bottom: 10px;
+}
+body
+{
+	font-family: verdana, tahoma, serif;
+	font-size: 11px;
+}
+table.order,
+table.order-id,
+table.customer-info,
+table.customer-info table,
+table.misc-section,
+table.item-section,
+table.summary-section,
+{
+	font-family: verdana, tahoma, serif;
+	font-size: 11px;
+}
+
+table.contact-section, .advertising-section, .payment-info-section{
+  margin:10px 0;
+}
+
+.contact-header, .payment-info-header{
+  font-weight: bold;
+}
+
+table.shipto-table, table.billto-table
+{
+	width: 300px;
+}
+table.item-section, table.summary-section
+{
+	width: 640px;
+}
+table.item-section td, table.item-section th
+{
+	padding: 0 5px;
+}
+.item-id-header
+{
+	text-align: left;
+}
+.item-qty-header
+{
+	text-align: right;
+}
+.item-description-header
+{
+	text-align: left;
+}
+.item-discount-header
+{
+	text-align: right;
+}
+.item-cost-header
+{
+	text-align: right;
+}
+.item-refund-header
+{
+	text-align: right;
+}
+.item-id
+{
+	text-align: left;
+	width: 100px;
+}
+.item-qty
+{
+	text-align: right;
+	width: 100px;
+}
+.item-description
+{
+	text-align: left;
+}
+.item-discount
+{
+	text-align: right;
+	width: 100px;
+}
+.item-cost
+{
+	text-align: right;
+	width: 100px;
+}
+.item-refund
+{
+	text-align: right;
+	width: 100px;
+}
+
+tr.order-item td{
+  vertical-align: top;
+}
+
+.no-discount .item-discount-header, .no-discount .item-discount
+{
+	display: none;
+}
+.no-refund .item-refund-header, .no-refund .item-refund
+{
+	display: none;
+}
+table.summary-section
+{
+	text-align: right;
+}
+table.summary-section tr.first-row td
+{
+	border-top: 1px solid black;
+}
+.logo-wrapper
+{
+	margin-bottom: 15px;
+}

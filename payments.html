@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"> <!-- Set this to the main language of your site -->
+<head>
+  <meta charset="utf-8">
+  <title>Payment Methods - My Account</title>
+  <meta name="description" content="Manage Credit Cards">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="css/normalize.css" rel="stylesheet" media="all">
+  <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+  <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+
+  <link href="css/styles.css" rel="stylesheet" media="all">
+  <!--[if lt IE 9]>
+  <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+  <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+  <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="js/moment.js"></script>
+  <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+  <script type="text/javascript" src="js/underscore_1.4.4.js"></script>
+  <script type="text/javascript" src="js/backbone_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount_rest_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount.js"></script>
+  <script type="text/javascript" src="payments.js"></script>
+
+
+  <script type="text/template" id="payments-template">
+    {{#if loading}}
+    Please wait. We're loading your credit cards now.<br>
+    <img src='images/jquery.smallhbar.indicator.gif'/>
+    {{else}}
+
+    <section>
+
+      <header class='order-header'>
+        <nav role="navigation">
+          <input type="button" class="addButton" value="Add New Credit Card"/>
+        </nav>
+      </header>
+
+
+      <div id="payments">
+        <!-- individual orders will render here.  -->
+      </div>
+      <div style='clear:both'></div>
+
+      <footer class='order-footer'>
+        <nav role="navigation">
+          {{#if hasPayments}}
+          <input type="button" class="addButton" value="Add New Credit Card"/>
+          {{/if}}
+        </nav>
+      </footer>
+
+
+
+    </section>
+    {{/if}}
+  </script>
+
+  <script type="text/template" id="payment-template">
+    <!-- the backbone view will wrap this content in an <article class="payment"></article> tag -->
+    <div class='payment'>
+      <table class='payment-table'>
+        <tr>
+          <td class='payment-position' style='background-image:url(images/{{classify cardType}}.png);background-repeat:no-repeat;'>
+            {{position}}.
+          </td>
+          <td>
+            <div class='payment-fields'>
+            <strong>{{cardNumber}}</strong><br>
+              {{cardName}}<br>
+              Expires {{cardExpMonth}} / {{cardExpYear}} {{#if expired}}<span class='red'>[expired]</span>{{/if}}<br>
+            {{#if lastUsedDate}}Last used on {{dateFormat lastUsedDate}}<br>{{/if}}
+            </div>
+            <input type="button" class="paymentButton editButton" value="Edit"/>
+            <input type="button" class="paymentButton deleteButton" value="Delete"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </script>
+
+</head>
+<body>
+
+<!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
+<!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
+<header role="banner">
+  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+
+  <h2>UltraCart Store</h2>
+  <h4><a href="index.html">My Account</a> &gt; <span class='disabled-looking'>Payment Methods</span></h4>
+  <nav role="navigation">
+  </nav>
+
+</header>
+
+<div class="wrap content">
+  <main role='main' id='payments'>
+  </main>
+  <div style='clear:both'></div>
+
+</div>
+
+
+<footer role="contentinfo">
+  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2013' is a date -->
+  <small>Copyright www.ultracart.com &copy;
+    <time datetime="2013">2013</time>
+  </small>
+</footer>
+
+<!-- Google Analytics - Optimized version by Mathias Bynens -->
+<!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
+<!-- Change the UA-XXXX-XX string to your site's ID -->
+<script type='text/javascript'>
+  var _gaq = [
+    ['_setAccount', 'UA-XXXX-XX'],
+    ['_trackPageview']
+  ];
+  (function (a, b) {
+    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+    d.parentNode.insertBefore(c, d)
+  })(document, "script");
+</script>
+
+</body>
+</html>

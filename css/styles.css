@@ -1,0 +1,499 @@
+/* ---------------------------------------------------------
+   HTML5 Bones
+   This stylesheet contains print styling and a section for 
+   you to simply add your own. This is a basic template 
+   after all.
+   ---------------------------------------------------------*/
+body {
+
+}
+
+/* Default link styling */
+a:link {
+  color: #0271fb;
+}
+
+a:visited {
+  color: #bd02fb;
+}
+
+a:hover, a:focus {
+  color: #000;
+}
+
+a:active {
+  color: #fb0e02;
+}
+
+/* ---------------------------------------------------------
+   Author's styles
+   ---------------------------------------------------------*/
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9em;
+}
+
+.logo-image {
+
+}
+
+header {
+  margin: 10px auto;
+  width: 95%;
+}
+
+article.order {
+  border: 1px solid #D0D0D0;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.order-header, .order-footer {
+  margin: 10px 0;
+  width: 100%;
+}
+
+.order-tiny-word, .order-detail-link {
+  font-size: 0.8em;
+}
+
+.order-details {
+  float: left;
+  width: 250px;
+  /*border-right: 1px solid #D0D0D0;*/
+}
+
+.order-actions {
+  float: right;
+  width: 250px;
+  /*border-left: 1px solid #D0D0D0;*/
+}
+
+.order-items{
+  /*border-top: 1px solid #D0D0D0;*/
+}
+
+.order-action-button {
+  width: 250px;
+}
+
+.order-detail-line {
+  margin: 5px 0;
+}
+
+.content {
+  margin: 10px auto;
+  width: 95%;
+}
+
+footer {
+  margin: 10px auto;
+  width: 95%;
+}
+
+.nav-link {
+  display: inline-block;
+  width: 160px;
+}
+
+.nav-logout {
+  display: none;
+}
+
+.disabled-looking {
+  color: #909090;
+}
+
+#login-form {
+  display: none;
+  border: 1px solid #D0D0D0;
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 10px;
+  width: 400px;
+}
+
+.login-form-row {
+  padding: 5px 0;
+}
+
+.login-form-row label {
+  display: inline-block;
+  width: 120px;
+}
+
+.info, .success, .warning, .error, .validation {
+  border: 1px solid;
+  margin: 10px 0;
+  padding: 15px 10px 15px 50px;
+  display: none;
+  border-radius: 5px;
+}
+
+.info {
+  color: #00529B;
+  background: #BDE5F8 url('../images/info.png') no-repeat 10px center;
+}
+
+.success {
+  color: #4F8A10;
+  background: #DFF2BF url('../images/success.png') no-repeat 10px center;
+}
+
+.warning {
+  color: #9F6000;
+  background: #FEEFB3 url('../images/warning.png') no-repeat 10px center;
+}
+
+.error {
+  color: #D8000C;
+  background: #FFBABA url('../images/error.png') no-repeat 10px center;
+}
+
+.recent-orders-table td, .recent-orders-table th {
+  padding: 3px 10px;
+  vertical-align: top;
+}
+
+.recent-orders-table th {
+  font-weight: bold;
+}
+
+.order-item-thumbnail {
+  width: 60px;
+  height: 60px;
+}
+
+#searchOrdersField {
+  width: 250px;
+}
+
+.orderNavigationTable {
+  width: 100%;
+}
+
+.orderNavigationWrapper {
+  border: 1px solid #D0D0D0;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.orderNavigationTableSearchCell {
+  width: 50%;
+  text-align: left;
+}
+
+.orderNavigationTableFilterCell {
+  width: 50%;
+  text-align: right;
+}
+
+.orderPaginationTable {
+  width: 100%;
+}
+
+.orderPaginationTableSearchCell {
+  width: 50%;
+  text-align: left;
+}
+
+.orderPaginationTableFilterCell {
+  width: 50%;
+  text-align: right;
+}
+
+.address-table td{
+  vertical-align: top;
+  padding: 5px 10px;
+}
+
+.address-position{
+  width:40px;
+  font-weight: bold;
+}
+
+div.address{
+  padding:20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #D0D0D0;
+  width:300px;
+  height:170px;
+  float:left;
+  margin-right: 15px;
+}
+
+div.address-fields{
+  height: 150px;
+}
+
+.addressButton{
+  width: 60px;
+}
+
+.red{
+  color: red;
+}
+
+.address-edit-table td{
+  padding: 3px 5px;
+}
+
+.address-label{
+  text-align: right;
+}
+
+
+
+.payment-table td{
+  vertical-align: top;
+  padding: 5px 10px;
+}
+
+.payment-position{
+  width:140px;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+div.payment{
+  padding:20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #D0D0D0;
+  width:400px;
+  height:140px;
+  float:left;
+  margin-right: 15px;
+}
+
+div.payment-fields{
+  height: 120px;
+}
+
+.paymentButton{
+  width: 60px;
+}
+
+.payment-edit-table td{
+  padding: 3px 5px;
+}
+
+.payment-label{
+  text-align: right;
+}
+
+
+.settings-edit-table td{
+  padding: 3px 5px;
+}
+
+.settings-label{
+  text-align: right;
+}
+
+#passwordStrengthText{
+  display:inline-block;
+  width:60px;
+}
+
+#passwordStrengthBar{
+  display:inline-block;
+  height:8px;
+}
+
+.reviewItemSelector{
+  cursor: pointer;
+}
+
+.reviewItemsPanel{
+  display:none;
+  font-size:0.8em;
+}
+.tracking-container{
+  display:none;
+  border-top: 1px solid #D0D0D0;
+  clear:both;
+}
+
+.case-container{
+  display:none;
+  border-top: 1px solid #D0D0D0;
+  clear:both;
+  margin:15px 0;
+  padding: 10px;
+}
+
+.case-message{
+  margin:10px 0;
+  border: 1px solid #D0D0D0;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.sender-customer{
+
+}
+
+.sender-customer-service{
+  background-color: #E0E0E0;
+  font-style: italic;
+}
+
+
+.case-message-body{
+  margin-top:5px;
+}
+
+
+.load-more{
+  display:none;
+}
+
+.review-line-item{
+  padding:3px 0;
+}
+
+.loading{
+  /* add some height to the box so multiple sections are sitting on top of each other during loading. */
+  height: 150px;
+}
+
+#not-reviewed-yet, #reviewed{
+  margin-bottom: 20px;
+  border-bottom: 1px solid #D0D0D0;
+  padding: 10px 0;
+}
+
+.featured{
+  background: url(../images/featured.png) no-repeat top left;
+}
+
+.review-details td{
+  vertical-align: top;
+  padding:10px;
+}
+
+.not-reviewed-yet-details td{
+  padding: 5px 15px 5px 0;
+  vertical-align: middle;
+}
+
+.reviews article{
+  margin-bottom: 20px;
+}
+
+.review-individual-ratings td{
+  padding: 0 5px 0 0;
+  vertical-align: middle;
+}
+
+.review-individual-ratings td.rating-name{
+  text-align: right;
+}
+
+
+img.stars-1{
+  width:100px;
+  height:18px;
+  background:url(../images/star_ratings.gif) 0 316px;
+ }
+img.stars-2{
+  width:100px;
+  height:18px;
+  background:url(../images/star_ratings.gif) 0 244px;
+ }
+img.stars-3{
+  width:100px;
+  height:18px;
+  background:url(../images/star_ratings.gif) 0 172px;
+ }
+img.stars-4{
+  width:100px;
+  height:18px;
+  background:url(../images/star_ratings.gif) 0 100px;
+ }
+img.stars-5{
+  width:100px;
+  height:18px;
+  background:url(../images/star_ratings.gif) 0 29px;
+ }
+
+
+/*==================== Ajax Please Wait ====================*/
+.PW_outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3em;
+  /* z-index: 9999; */
+}
+
+.PW_inner {
+  margin: 0.4em auto;
+  width: 15em;
+  font-size: 1.2em;
+  text-align: center;
+  background-color: #555555;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#666666), to(#555555));
+  background-image: -webkit-linear-gradient(top, #666666, #555555);
+  background-image: -moz-linear-gradient(top, #666666, #555555);
+  background-image: -o-linear-gradient(top, #666666, #555555);
+  background-image: linear-gradient(to bottom, #666666, #555555);
+  padding: 5px;
+  border: 1px solid #3C3C3C;
+  border-radius: 5px;
+  color: #FFFFFF;
+}
+
+/* ---------------------------------------------------------
+   Print styles
+   ---------------------------------------------------------*/
+@media print {
+  * {
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background: transparent !important;
+  }
+
+  html {
+    background-color: #fff;
+  }
+
+  /* Hide navigation */
+  nav {
+    display: none;
+  }
+
+  /* Show link destinations in brackets after the link text */
+  a[href]:after {
+    content: " (" attr(href) ") ";
+  }
+
+  a[href] {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #06c;
+    border: none;
+  }
+
+  /* Don't show link destinations for JavaScript or internal links */
+  a[href^="javascript:"]:after, a[href^="#"]:after {
+    content: "";
+  }
+
+  /* Show abbr title value in brackets after the text */
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  figure {
+    margin-bottom: 1em;
+    overflow: hidden;
+  }
+
+  figure img {
+    border: 1px solid #000;
+  }
+}

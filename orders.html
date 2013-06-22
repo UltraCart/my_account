@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"> <!-- Set this to the main language of your site -->
+<head>
+  <meta charset="utf-8">
+  <title>Orders - My Account</title>
+  <meta name="description" content="View Order History">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="css/normalize.css" rel="stylesheet" media="all">
+  <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+  <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+
+  <link href="css/styles.css" rel="stylesheet" media="all">
+  <!--[if lt IE 9]>
+  <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+  <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+  <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="js/moment.js"></script>
+  <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+  <script type="text/javascript" src="js/underscore_1.4.4.js"></script>
+  <script type="text/javascript" src="js/backbone_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount_rest_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount.js"></script>
+  <script type="text/javascript" src="orders.js"></script>
+
+
+  <script type="text/template" id="tracking-template">
+    <h4 class='disabled-looking'>Tracking Information</h4>
+    {{#each tracking}}
+    {{#if hasTrackingUrl}}
+    Tracking Number: <strong><a target='_blank' href="{{trackingUrl}}">{{trackingNumber}}</a></strong>
+    {{else}}
+    Tracking Number: <strong>{{trackingNumber}}</strong>: <em>No tracking information available for this tracking
+    number.</em>
+    {{/if}}
+    <br><br>
+    {{/each}}
+  </script>
+
+
+  <script type="text/template" id="orders-template">
+    {{#if loading}}
+    Please wait. We're loading your orders now.<br>
+    <img src='images/jquery.smallhbar.indicator.gif'/>
+    {{else}}
+
+    <section>
+
+      <header class='order-header'>
+        <nav role="navigation">
+          {{#if showPagination}}
+
+          <table class='orderPaginationTable' summary='order pagination'>
+            <tr>
+              <td class='orderPaginationTableSearchCell'>
+                <strong>{{totalRecords}}</strong> orders {{#if isSearch}} match your search.{{/if}}{{#if isFilterByTime}}placed in <strong>{{timePeriod}}</strong>.{{/if}} Showing orders
+                {{firstRecordOnPage}}-{{lastRecordOnPage}}
+              </td>
+              <td class='orderPaginationTableFilterCell'>
+                {{#if showGotoPage}}
+                {{#if showPrevious}}<a class="orderNavCell" href="#">Previous</a> &lt;&lt; {{/if}}
+                <strong>Page {{pageNumber}} of {{totalPages}}</strong>
+                {{#if showNext}} &gt;&gt; <a class="orderNavCell" href="#">Next</a>{{/if}}
+                {{/if}}
+              </td>
+            </tr>
+          </table>
+          {{/if}}
+        </nav>
+      </header>
+
+
+      <div id="orders">
+        <!-- individual orders will render here.  -->
+      </div>
+
+      <footer class='order-footer'>
+        <nav role="navigation">
+          {{#if showPagination}}
+
+          <table class='orderPaginationTable' summary='order pagination'>
+            <tr>
+              <td class='orderPaginationTableSearchCell'>
+                <strong>{{totalRecords}}</strong> orders {{#if isSearch}} match your search.{{/if}}{{#if isFilterByTime}}placed in <strong>{{timePeriod}}</strong>.{{/if}} Showing orders
+                {{firstRecordOnPage}}-{{lastRecordOnPage}}
+              </td>
+              <td class='orderPaginationTableFilterCell'>
+                {{#if showGotoPage}}
+                {{#if showPrevious}}<a class="orderNavCell" href="#">Previous</a> &lt;&lt; {{/if}}
+                <strong>Page {{pageNumber}} of {{totalPages}}</strong>
+                {{#if showNext}} &gt;&gt; <a class="orderNavCell" href="#">Next</a>{{/if}}
+                {{/if}}
+              </td>
+            </tr>
+          </table>
+          {{/if}}
+        </nav>
+      </footer>
+
+
+    </section>
+    {{/if}}
+  </script>
+
+  <script type="text/template" id="order-template">
+    <!-- the backbone view will wrap this content in an <article class="order"></article> tag -->
+    <div class='order-details'>
+      <div class='order-tiny-word'>ORDER PLACED</div>
+      <h2>{{dateFormat creationDate}}</h2>
+
+      <div class='order-detail-link'><a href="order-detail.html?orderId={{orderId}}">Order Details</a></div>
+      <div class='order-detail-line order-tiny-word'>ORDER #{{orderId}}</div>
+      <div class='order-detail-line order-tiny-word'>RECIPIENT {{shipToFirstName}} {{shipToLastName}}</div>
+      <div class='order-detail-line order-tiny-word'>TOTAL {{totalFormatted}}</div>
+    </div>
+    <div class='order-actions'>
+      <div><input type="button" value="Track Package" class='trackingButton order-action-button'/></div>
+      <div style='display:none'><!-- NOT IMPLEMENTED YET --><input type="button" value="Return or Replace Items" class='rmaButton order-action-button'/></div>
+      <div><input type="button" value="{{#if orderCase}}View Comments{{else}}Send Comment to Customer Service{{/if}}" class='commentButton order-action-button'/>
+      </div>
+      <div><input type="button" value="Write Product Review" class='reviewButton order-action-button'/></div>
+      <div class='reviewItemsPanel'>
+        Select an item to review:
+        <ol>
+          {{#each items}}
+          <li class="reviewItemSelector" data-itemid="{{itemId}}">{{description}}</li>
+          {{/each}}
+        </ol>
+      </div>
+
+    </div>
+
+    <div class='order-header'>
+      <h4 class='disabled-looking'>Status: {{status}}</h4>
+    </div>
+
+    <div class='order-items'>
+
+      <table>
+        {{#each items}}
+        <tr>
+          <td>
+            {{#with metaData}}{{#if defaultImageUrl}}<img class='order-item-thumbnail' src="{{defaultImageUrl}}" alt=''/>{{/if}}{{/with}}
+          </td>
+          <td><a href="{{#with metaData}}{{viewUrl}}{{/with}}">{{description}}</a></td>
+        </tr>
+        {{/each}}
+      </table>
+
+    </div>
+
+    <div class='tracking-container'></div>
+    <div class='case-container'>
+      <h4 class='disabled-looking'>Comments</h4>
+      {{#if orderCase}}
+      <div class='case-subject'>
+        Subject: {{orderCase.subject}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>Conversation began {{dateFormat creationDate}}</em>
+      </div>
+      <div class='case-messages'>
+        {{#each orderCase.messages}}
+        <div class='case-message sender-{{classify messageSender}}'>
+          <div class='case-message-header'>
+            On {{dateFormat messageDate}},
+            {{#compare messageSender 'Customer' operator="=="}}
+            from you to customer service:
+            {{/compare}}
+            {{#compare messageSender 'Customer Service' operator="=="}}
+            from customer service to you:
+            {{/compare}}
+          </div>
+          <div class='case-message-body'>
+            {{message}}
+          </div>
+        </div>
+
+        {{/each}}
+      </div>
+      {{/if}}
+
+      <div class='message-entry'>
+        <div class='case-subject'></div>
+        {{#if orderCase}}{{else}}
+        <div>Subject:<br><input type="text" class="case-subject-field" size="50" maxlength="200"
+                                     value="{{subject}}"/></div>
+        {{/if}}
+        Comment:<br><textarea class="case-message-field" cols="100" rows="5"></textarea><br>
+        <em>limit 2000 characters.</em><br>
+        <input type="button" class='case-message-button' value='Send Comment'/>
+      </div>
+    </div>
+
+    <div style='clear:both'></div>
+
+  </script>
+
+</head>
+<body>
+
+<!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
+<!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
+<header role="banner">
+  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+
+  <h2>UltraCart Store</h2>
+  <h4><a href="index.html">My Account</a> &gt; <span class='disabled-looking'>My Orders</span></h4>
+  <nav role="navigation">
+    <div class='orderNavigationWrapper'>
+      <table class='orderNavigationTable' summary='order navigation'>
+        <tr>
+          <td class='orderNavigationTableSearchCell'>
+            Search Your Orders:
+            <input type="text"
+                   id="searchOrdersField"
+                   placeholder="Order ID or Item"/>
+            <input type="button" value="Search Orders" id="searchOrdersButton"/>
+          </td>
+          <td class='orderNavigationTableFilterCell'>
+            Orders placed in:
+            <select id="timeFilter">
+              <option value='help-text' disabled='disabled'>Select a time period</option>
+              <option value="last30days">Last 30 days</option>
+              <option value="last6months">Last 6 months</option>
+              <!-- additional values are added to this list dynamically during page ready -->
+            </select>
+            <input type="button" value="Go" id="filterOrdersButton"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </nav>
+
+</header>
+
+<div class="wrap content">
+  <main role='main' id='orders'>
+  </main>
+
+</div>
+
+
+<footer role="contentinfo">
+  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2013' is a date -->
+  <small>Copyright www.ultracart.com &copy;
+    <time datetime="2013">2013</time>
+  </small>
+</footer>
+
+<!-- Google Analytics - Optimized version by Mathias Bynens -->
+<!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
+<!-- Change the UA-XXXX-XX string to your site's ID -->
+<script type='text/javascript'>
+  var _gaq = [
+    ['_setAccount', 'UA-XXXX-XX'],
+    ['_trackPageview']
+  ];
+  (function (a, b) {
+    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+    d.parentNode.insertBefore(c, d)
+  })(document, "script");
+</script>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html"> <!-- Set this to the main language of your site -->
+<head>
+<meta charset="utf-8">
+<title>Order Detail - My Account</title>
+<meta name="description" content="View Order Details">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="css/normalize.css" rel="stylesheet" media="all">
+<!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+<!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+
+<link href="css/styles.css" rel="stylesheet" media="all">
+<link href="css/order-detail-style.css" rel="stylesheet" media="all">
+<!--[if lt IE 9]>
+<script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+<script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="js/moment.js"></script>
+<script type="text/javascript" src="js/handlebars_1.0.js"></script>
+<script type="text/javascript" src="js/underscore_1.4.4.js"></script>
+<script type="text/javascript" src="js/myaccount_rest_1.0.js"></script>
+<script type="text/javascript" src="js/myaccount.js"></script>
+<script type="text/javascript" src="order-detail.js"></script>
+
+<!-- TODO huge tutorial on the custom handlebars helpers and the Order object itself -->
+
+<script type="text/template" id="order-template">
+<!-- the backbone view will wrap this content in an <article class="order"></article> tag -->
+<div class='order-detail'>
+
+<table class='{{#if themeCode}}sbt-{{validClassName themeCode}}{{/if}} order'>
+
+
+{{#compare paymentMethod 'Quote Request' operator='=='}}
+{{startSection classes="quote-request-id quote-request-id-[orderId] order-section"}}
+<tr>
+  <td class='quote-request-id-label label'>{{labels.quoteRequestIdField}}:</td>
+  <td class='quote-request-id-field field'>{{orderId}}</td>
+</tr>
+<tr class='quote-request-date'>
+  <td class='quote-request-date-label label'>{{labels.requestDateField}}:</td>
+  <td class='quote-request-date-field field'>{{dateFormat creationDate}}</td>
+</tr>
+<tr class='quote-expiration-date'>
+  <td class='quote-expiration-date-label label'>{{labels.expirationDateField}}:</td>
+  <td class='quote-expiration-date-field field'>{{dateFormat quoteExpirationDate}}</td>
+</tr>
+{{endSection}}
+{{/compare}}
+
+{{#compare paymentMethod 'Quote Request' operator='!='}}
+{{startSection classes="order-section order-id order-id-[orderId]"}}
+<tr>
+  <td class='order-id-label label'>{{labels.orderIdField}}:</td>
+  <td class='order-id-field field'>{{orderId}}</td>
+</tr>
+<tr class='creation-date'>
+  <td class='creation-date-label label'>{{labels.orderDateField}}:</td>
+  <td class='creation-date-field field'>{{dateFormat creationDate}}</td>
+</tr>
+{{endSection}}
+{{/compare}}
+
+<tr class='before-customer'>
+  <td></td>
+</tr>
+
+
+{{startSection class='customer-info order-section'}}
+<tr>
+  <td style='vertical-align:top;'
+      class=' billto-section order-section {{#if billToState}}billto-state-{{validClassName billToState}}{{/if}} {{#if billToCountry}}billto-country-{{validClassName billToCountry}}{{/if}}'>
+    <!-- start billing table -->
+
+    <table class='billto-table'>
+      <tr>
+        <td class='billto-header section-header'>{{labels.billToHeader}}</td>
+        <td>&nbsp;</td>
+      </tr>
+
+      {{htmlField name="billto-company" label=labels.companyField value="[billToCompany]"}}
+      {{htmlField name="billto-title" label=labels.titleField value="[billToTitle]"}}
+      {{htmlField name="billto-name" label=labels.nameField value="[billToFirstName] [billToLastName]"}}
+      {{htmlField name="billto-address1" label=labels.addressField value="[billToAddress1]"}}
+      {{htmlField name="billto-address2" label="" value="[billToAddress2]"}}
+      {{htmlField name="billto-city" label=labels.cityField value="[billToCity]"}}
+      {{htmlField name="billto-state" label=labels.stateField value="[billToState]"
+      classes="billto-state-[billToState]"}}
+      {{htmlField name="billto-zip" label=labels.zipField value="[billToPostalCode]"}}
+      {{htmlField name="billto-country" label=labels.countryField value="[billToCountry]"
+      classes="billto-country-[billToCountry]"}}
+    </table>
+
+
+    <!-- end billing table -->
+  </td>
+  <td style='vertical-align:top;'
+      class=' shipto-section order-section {{#if shipToState}}shipto-state-{{validClassName shipToState}}{{/if}} {{#if shipToCountry}}shipto-country-{{validClassName shipToCountry}}{{/if}}'>
+    <!-- start shipping table  -->
+
+    <table class='shipto-table'>
+      <tr>
+        <td class='shipto-header section-header'>{{labels.shipToHeader}}</td>
+        <td>&nbsp;</td>
+      </tr>
+
+      {{htmlField name="shipto-company" label=labels.companyField value="[shipToCompany]"}}
+      {{htmlField name="shipto-title" label=labels.titleField value="[shipToTitle]"}}
+      {{htmlField name="shipto-name" label=labels.nameField value="[shipToFirstName] [shipToLastName]"}}
+      {{htmlField name="shipto-address1" label=labels.addressField value="[shipToAddress1]"}}
+      {{htmlField name="shipto-address2" label="" value="[shipToAddress2]"}}
+      {{htmlField name="shipto-city" label=labels.cityField value="[shipToCity]"}}
+      {{htmlField name="shipto-state" label=labels.stateField value="[shipToState]"
+      classes="shipto-state-[shipToState]"}}
+      {{htmlField name="shipto-zip" label=labels.zipField value="[shipToPostalCode]"}}
+      {{htmlField name="shipto-country" label=labels.countryField value="[shipToCountry]"
+      classes="shipto-country-[shipToCountry]"}}
+      {{htmlField name="shipto-day-phone" label=labels.phoneField value="[shipToDayPhone]"}}
+      {{htmlField name="shipto-evening-phone" label=labels.eveningPhoneField value="[shipToEveningPhone]"}}
+
+    </table>
+
+
+    <!-- end shipping table -->
+  </td>
+</tr>
+{{endSection}}{{! end of customer section }}
+
+<tr class='after-customer'>
+  <td></td>
+</tr>
+
+
+<tr>
+  <td>
+    <table
+        class='misc-section order-section {{#if shippingMethodCompany}} shipping-method-{{validClassName shippingMethodCompany}}{{/if}}'>
+      {{htmlField name="shipping-method" label=labels.shippingMethodField value="[shippingMethodDetailed]"
+      classes="shipping-method-[shippingMethodName]"}}
+
+      {{#if shipOnDate}}
+      {{htmlField name="ship-on-date" label=labels.shipOnDateField value="[shipOnDate]" isDate="1"}}
+      {{/if}}
+
+
+      {{! can't use htmlField on delivery date since it has additional suffix of (Sat).. }}
+      {{#if deliveryDate}}
+      <tr>
+        <td class='delivery-date-label label'>{{labels.deliveryDateField}}:</td>
+        <td class='delivery-date-field field'>{{dateFormat deliveryDate}}
+          {{#if saturdayDelivery}} (Sat){{/if}}
+        </td>
+      </tr>
+      {{/if}}
+
+      {{#if shipping3rdPartyAccountNumber}}
+      {{htmlField name="ship-on-account" label=labels.shipOnAccountField
+      value="[shipping3rdPartyAccountNumber]"}}
+      {{/if}}
+
+      {{#if gift}}
+      {{htmlField name="gift" label=labels.giftField value="[gift]" isYesNo="1"}}
+      {{htmlField name="gift-email" label=labels.giftEmailField value="[giftEmail]"}}
+      {{/if}}
+
+      {{htmlField name="tax-county" label=labels.taxCountyField value="[taxCounty]"}}
+
+    </table>
+  </td>
+</tr>
+
+
+{{startSection classes='contact-section order-section'}}
+<tr>
+  <td colspan='2' class='contact-header section-header'>Contact Info</td>
+</tr>
+
+{{htmlField name="contact-email" label=labels.emailField value="[email]"}}
+
+{{#each ccEmails}}
+{{htmlField name="cc-email" label=labels.ccEmailField value=this}}
+{{/each}}{{! end of each ccEmails}}
+
+
+{{#if billToDayPhone}}
+{{htmlField name="contact-day-phone" label="Day Phone" value="[billToDayPhone]"}}
+{{else}}
+{{#if shipToDayPhone}}
+{{htmlField name="contact-day-phone" label="Day Phone" value="[shipToDayPhone]"}}
+{{/if}}
+{{/if}}
+
+{{#if billToEveningPhone}}
+{{htmlField name="contact-evening-phone" label="Evening Phone" value="[billToEveningPhone]"}}
+{{else}}
+{{#if shipToEveningPhone}}
+{{htmlField name="contact-evening-phone" label="Evening Phone" value="[shipToEveningPhone]"}}
+{{/if}}
+{{/if}}
+
+{{htmlField name="contact-fax" label="Fax" value="[fax]"}}
+{{endSection}}
+
+{{#if referralCode}}
+{{htmlField name="referral-code" label=labels.referralCodeField value="[referralCode]"}}
+{{/if}}
+
+
+{{startSection classes="payment-[paymentNote] payment-info-section order-section"}}
+<tr class="{{classify paymentNote}}-order no-label">
+  <td class='{{classify paymentNote}}-field field payment-info-header'>{{paymentNote}}</td>
+</tr>
+
+{{#compare paymentMethod "Credit Card" operator="=="}}
+{{htmlField name="card-type" label="Card Type" value="[cardType]" classes="card-type-[cardType]"}}
+{{htmlField name="card-number" label="Card Number" value="[cardNumber]"}}
+{{/compare}}
+
+{{#compare paymentMethod "Check" operator="=="}}
+{{#if paymentDate}}
+{{htmlField name="check-number" label="Check Number" value="[checkNumber]"}}
+{{/if}}
+{{/compare}}
+
+{{#compare paymentMethod "Purchase Order" operator="=="}}
+{{htmlField name="purchase-order-number" label="Purchase Order Number" value="[purchaseOrderNumber]"}}
+{{/compare}}
+
+{{endSection}}
+
+
+{{! Show the advertising source Code if it is available }}
+{{#if advertisingSource}}
+{{startSection classes="advertising-section order-section"}}
+{{htmlField name="advertising-source" label=labels.advertisingSourceField value="[advertisingSource]"}}
+{{endSection}}
+{{/if}}
+
+
+{{#if rejected}}
+{{startSection classes="rejected-section order-section"}}
+{{#if rejectedDate}}
+{{htmlField name="rejected-order" label="Rejected Order" value="[rejectDate]" isDate="1"}}
+{{else}}
+{{htmlField name="rejected-order" label="Rejected Order" delimited=""}}
+{{/if}}
+{{endSection}}
+{{/if}}
+
+
+{{#if coupons}}
+{{startSection classes="coupon-section order-section"}}
+<tr>
+  <td colspan='2' class='coupon-header section-header'>Coupons</td>
+</tr>
+
+{{#each coupons}}
+{{htmlFieldNoLabel name="coupon-code" value="[couponCode] - [description]" delimiter=""}}
+{{/each}}
+
+{{endSection}}
+{{/if}}
+
+
+<tr class='itemTableHeaderRow'>
+  <td>
+    <div class='itemTableHeader'>{{labels.itemTableHeader}}</div>
+  </td>
+</tr>
+<tr>
+  <td>
+    <table style='vertical-align:top'
+           class='item-section order-section {{#if hasRefund}}yes-refund{{else}}no-refund{{/if}} {{#if hasDiscount}}yes-discount{{else}}no-discount{{/if}}'>
+      <thead>
+
+      <tr class='item-header section-header {{#if hasRefund}}yes-refund{{else}}no-refund{{/if}} {{#if hasDiscount}}yes-discount{{else}}no-discount{{/if}}'>
+        <th class='item-id-header'>{{labels.itemHeader}}</th>
+        <th class='item-qty-header'>{{labels.quantityHeader}}</th>
+        <th class='item-description-header'>{{labels.descriptionHeader}}</th>
+        <th class='item-discount-header'>Discount</th>
+        <th class='item-cost-header'>{{labels.amountHeader}}</th>
+        <th class='item-refund-header'>{{labels.refundedHeader}}</th>
+      </tr>
+      </thead>
+
+      <tbody class='items'>
+
+      {{#each items}}
+
+      <tr class='item-id-{{validClassName itemId}} {{#if discount}}yes-discount{{else}}no-discount{{/if}} {{#if totalRefunded}}yes-refund{{else}}no-refund{{/if}} order-item'>
+        <td class='item-id'>{{itemId}}</td>
+        <td class='item-qty'>{{quantity}}</td>
+
+        <td class="item-description">
+          {{description}}
+          {{#if activationCode}}<br>{{activationCode}}{{/if}}
+          {{#if options}}
+          <br>
+          <table class='item-options'>
+            {{#each options}}
+            <tr>
+              <td class="option-{{validClassName label}} item-option">
+                <span class='option-label'>{{label}}</span>
+                <ul class='option-list'>
+                  {{#each text}}
+                  <li class='option-list-item'>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </td>
+            </tr>
+            {{/each}}
+          </table>
+          {{/if}}{{! end if-options }}
+          {{#if ediInformation}}
+          <table class='edi-destinations'>
+            {{#each ediInformation}}
+            <tr>
+              <td class='item-edi'>
+                {{this}}
+              </td>
+            </tr>
+            {{/each}}
+          </table>
+          {{/if}}
+
+        </td>
+
+        <td class='item-discount'>{{discountFormatted}}</td>
+        <td class='item-cost'>{{totalCostFormatted}}</td>
+        <td class='item-refund'>{{totalRefundFormatted}}</td>
+
+      </tr>
+      {{! end of individual item }}
+      {{/each}}
+
+      </tbody>
+    </table>
+  </td>
+</tr>
+{{! end of items wrapper around items }}
+
+
+
+<tr>
+  <td>
+    <table
+        class='summary-section order-section {{#if hasRefund}}yes-refund{{else}}no-refund{{/if}} {{#if hasDiscount}}yes-discount{{else}}no-discount{{/if}} {{#if giftWrapTitle}}yes-gift-wrap{{else}}no-gift-wrap{{/if}}'>
+
+      {{#if giftWrapTitle}}
+      <tr class='gift-wrap'>
+        <td class='gift-wrap-cell'>
+          <span class='gift-wrap-label'>{{labels.wrappingPaperField}}:</span>
+          <span class='gift-wrap-title'>{{giftWrapTitle}}</span>
+        </td>
+        <td class='gift-wrap-cost'>{{giftWrapCostFormatted}}</td>
+      </tr>
+      {{/if}}
+
+
+      {{#if subtotalDiscount}}
+      {{htmlField name="subtotal-before-discount" label=labels.subtotalBeforeDiscountsField
+      value="[subtotalBeforeDiscountFormatted]" delimiter=""}}
+      {{htmlField name="subtotal-discount" label=labels.discountsField value="[discountFormatted]" delimiter=""}}
+      {{/if}}
+
+      <tr class='subtotal'>
+        <td class='subtotal-label label'>{{labels.subtotalField}}</td>
+        <td class='subtotal-field field'>{{subtotalFormatted}}
+          {{#if subtotalRefunded}}
+          <span class='subtotal-refund refund'>{{subtotalRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+
+
+      {{#if taxShipping}}
+      {{! if shipping is taxed, show shipping before the tax, else show tax first }}
+
+      <tr class='shipping-handling'>
+        <td class='shipping-handling-label label'>{{labels.shippingHandlingField}}</td>
+        <td class='shipping-handling-field field'>{{shippingHandlingTotalFormatted}}
+          {{#if shippingHandlingRefunded}}
+          <span class='shipping-handling-refund refund'>{{shippingHandlingRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+      {{htmlField name="tax-rate" label=labels.taxRateField value="[taxRateFormatted]" delimiter=""}}
+      <tr class='tax'>
+        <td class='tax-label label'>{{labels.taxField}}</td>
+        <td class='tax-field field'>{{taxFormatted}}
+          {{#if taxRefunded}}
+          <span class='tax-refund refund'>{{taxRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+
+      {{else}}
+
+      {{htmlField name="tax-rate" label=labels.taxRateField value="[taxRateFormatted]" delimiter=""}}
+      <tr class='tax'>
+        <td class='tax-label label'>{{labels.taxField}}</td>
+        <td class='tax-field field'>{{taxFormatted}}
+          {{#if taxRefunded}}
+          <span class='tax-refund refund'>{{taxRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+      <tr class='shipping-handling'>
+        <td class='shipping-handling-label label'>{{labels.shippingHandlingField}}</td>
+        <td class='shipping-handling-field field'>{{shippingHandlingTotalFormatted}}
+          {{#if shippingHandlingRefunded}}
+          <span class='shipping-handling-refund refund'>{{shippingHandlingRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+
+      {{/if}}
+
+
+      {{#if giftCharge}}
+      {{htmlField name='gift-charge' label=labels.giftChargeField value="[giftChargeFormatted]" delimiter=""}}
+      {{/if}}
+
+      {{#if surcharge}}
+      {{htmlField name='surcharge' label=labels.surchargeField value="[surchargeFormatted]" delimiter=""}}
+      {{/if}}
+
+      {{#if showBuysafe}}
+      <tr class='buysafe'>
+        <td class='buysafe-label label'>buySAFE</td>
+        <td class='buysafe-field field'>{{buysafeCostFormatted}}
+          {{#if buysafeRefunded}}
+          <span class='buysafe-refund refund'>{{buysafeRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+      {{/if}}
+
+      {{#if showInsureShip}}
+      <tr class='insure-ship'>
+        <td class='insure-ship-label label'>InsureSHip</td>
+        <td class='insure-ship-field field'>{{insureShipCostFormatted}}
+          {{#if insureShipRefunded}}
+          <span class='insure-ship-refund refund'>{{insureShipRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+      {{/if}}
+
+
+      {{#if giftCertificateAmount}}
+      <tr class='gift-certificate'>
+        <td class='gift-certificate-label label'>{{labels.giftCertificateField}} {{giftCertificateCode}}</td>
+        <td class='gift-certificate-field field'>{{giftCertificateAmountFormatted}}</td>
+      </tr>
+      {{/if}}
+
+      <tr class='total'>
+        <td class='total-label label'>{{labels.totalField}}</td>
+        <td class='total-field field'>{{totalFormatted}}
+          {{#if totalRefunded}}
+          <span class='total-refund refund'>{{totalRefundedFormatted}}</span>
+          {{/if}}
+        </td>
+      </tr>
+
+
+    </table>
+  </td>
+</tr>
+
+
+{{#if showCurrencyWarning}}
+{{startSection classes="currency-conversion order-section"}}
+<tr class='currency-conversion-msg1'>
+  <td>{{currencyWarning}}</td>
+</tr>
+<tr class='currency-conversion-msg2'>
+  <td>{{labels.yourActualMessage}}</td>
+</tr>
+
+{{endSection}}
+{{/if}}
+
+
+{{#if giftMessage}}
+<tr>
+  <td class='gift-message-section text-block order-section'>
+    <table>
+      <tr>
+        <td class='gift-message-header section-header'>Gift Message</td>
+      </tr>
+      {{#each giftMessage}}
+      <tr>
+        <td>{{this}}</td>
+      </tr>
+      {{/each}}
+    </table>
+  </td>
+</tr>
+{{/if}}
+
+
+{{#if specialInstructions}}
+<tr>
+  <td class='special-instructions-section text-block order-section'>
+    <table>
+      <tr>
+        <td class='special-instructions-header section-header'>Special Instructions</td>
+      </tr>
+      {{#each specialInstructions}}
+      <tr>
+        <td>{{this}}</td>
+      </tr>
+      {{/each}}
+    </table>
+  </td>
+</tr>
+{{/if}}
+
+
+</table>
+{{! end of order table }}
+
+<div style='clear:both'></div>
+
+</div>
+
+</script>
+
+</head>
+<body>
+
+<!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
+<!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
+<header role="banner">
+  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+
+  <h2>UltraCart Store</h2>
+  <h4><a href="index.html">My Account</a> &gt; <a href="orders.html">My Orders</a> &gt;<span
+      class='disabled-looking'>Order Detail</span></h4>
+</header>
+
+<div class="wrap content">
+  <main role='main' id='order'></main>
+</div>
+
+
+<footer role="contentinfo">
+  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2013' is a date -->
+  <small>Copyright www.ultracart.com &copy;
+    <time datetime="2013">2013</time>
+  </small>
+</footer>
+
+<!-- Google Analytics - Optimized version by Mathias Bynens -->
+<!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
+<!-- Change the UA-XXXX-XX string to your site's ID -->
+<script type='text/javascript'>
+  var _gaq = [
+    ['_setAccount', 'UA-XXXX-XX'],
+    ['_trackPageview']
+  ];
+  (function (a, b) {
+    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+    d.parentNode.insertBefore(c, d)
+  })(document, "script");
+</script>
+
+</body>
+</html>
