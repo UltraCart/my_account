@@ -50,7 +50,7 @@ function loadCreditCard(id) {
 
   var years = [];
   var dt = new Date();
-  var year = dt.getYear() + 1900;
+  var year = dt.getFullYear();
   for (var i = 0; i < 20; i++) {
     years.push(year + i);
   }
