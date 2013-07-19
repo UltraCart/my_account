@@ -1,4 +1,3 @@
-
 // ---------------------------------------------------------
 // Security (well, not really security, but a helper to
 // redirect the user if they're not logged in.  Security
@@ -459,7 +458,7 @@ jQuery(document).ready(function () {
 
   // fill in the date search with the last 10 years.
   var dt = new Date();
-  var year = dt.getYear() + 1900;
+  var year = dt.getFullYear();
   var html = '';
   for (var i = 0; i < 10; i++) {
     html += "<option value='year-" + (year - i) + "'>" + (year - i) + "</option>";
