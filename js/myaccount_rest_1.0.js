@@ -249,6 +249,13 @@ ultracart.MyAccount = function (merchantId) {
 
     options = options || {};
 
+    if(!customerInformation){
+       customerInformation = {}; // this will still fail, but will fail gracefully
+     }
+     if(!customerInformation.hasOwnProperty('merchantId')){
+       customerInformation['merchantId'] = this.merchantId;
+     }
+
     var account = null;
 
     jQuery.ajax({

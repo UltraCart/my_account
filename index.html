@@ -1,62 +1,62 @@
 <!doctype html>
 <html lang="en"> <!-- Set this to the main language of your site -->
 <head>
-<meta charset="utf-8">
-<title>My Account</title>
-<meta name="description" content="Manage Account Settings and View Order History">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>My Account</title>
+  <meta name="description" content="Manage Account Settings and View Order History">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="css/normalize.css" rel="stylesheet" media="all">
-<!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
-<!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+  <link href="css/normalize.css" rel="stylesheet" media="all">
+  <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+  <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
 
-<link href="css/styles.css" rel="stylesheet" media="all">
-<!--[if lt IE 9]>
-<script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
-<script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
-<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
-<script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/handlebars_1.0.js"></script>
-<script type="text/javascript" src="js/myaccount_rest_1.0.js"></script>
-<script type="text/javascript" src="js/myaccount.js"></script>
-<script type="text/javascript" src="index.js"></script>
+  <link href="css/styles.css" rel="stylesheet" media="all">
+  <!--[if lt IE 9]>
+  <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+  <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+  <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="js/moment.js"></script>
+  <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount_rest_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount.js"></script>
+  <script type="text/javascript" src="index.js"></script>
 
-<script type="text/template" id="recent-orders-template">
-  <h4>Recent Activity</h4>
-  <table class='recent-orders-table'>
-    <thead>
-    <tr>
-      <td>Order Date</td>
-      <td>Order ID</td>
-      <td>Total</td>
-      <td>Contents</td>
-    </tr>
-    </thead>
-    <tbody>
-    {{#each orders}}
-    <tr>
-      <td>{{dateFormat creationDate}}</td>
-      <td><a href="orders.html#order/{{orderId}}">{{orderId}}</a></td>
-      <td>{{totalFormatted}}</td>
-      <td>
-        <table>
-          {{#each items}}
-          <tr>
-            <td>
-              {{#with metaData}}{{#if defaultImageUrl}}<img class='order-item-thumbnail' src="{{defaultImageUrl}}"
-                                                            alt=''/>{{/if}}{{/with}}
-            </td>
-            <td><a href="{{#with metaData}}{{viewUrl}}{{/with}}">{{description}}</a></td>
-          </tr>
-          {{/each}}
-        </table>
-      </td>
-    </tr>
-    {{/each}}
+  <script type="text/template" id="recent-orders-template">
+    <h4>Recent Activity</h4>
+    <table class='recent-orders-table'>
+      <thead>
+      <tr>
+        <td>Order Date</td>
+        <td>Order ID</td>
+        <td>Total</td>
+        <td>Contents</td>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each orders}}
+      <tr>
+        <td>{{dateFormat creationDate}}</td>
+        <td><a href="orders.html#order/{{orderId}}">{{orderId}}</a></td>
+        <td>{{totalFormatted}}</td>
+        <td>
+          <table>
+            {{#each items}}
+            <tr>
+              <td>
+                {{#with metaData}}{{#if defaultImageUrl}}<img class='order-item-thumbnail' src="{{defaultImageUrl}}"
+                                                              alt=''/>{{/if}}{{/with}}
+              </td>
+              <td><a href="{{#with metaData}}{{viewUrl}}{{/with}}">{{description}}</a></td>
+            </tr>
+            {{/each}}
+          </table>
+        </td>
+      </tr>
+      {{/each}}
 
-    </tbody>
-  </table>
-</script>
+      </tbody>
+    </table>
+  </script>
 
 </head>
 <body>
@@ -94,7 +94,8 @@
             <li><a href="orders.html" class='nav-link'>Orders</a> View my orders, leave feedback, return products</li>
             <li><a href="payments.html" class='nav-link'>Payments</a> View and manage my credit cards</li>
             <li><a href="billing.html" class='nav-link'>Billing Addresses</a> View and manage my billing addresses</li>
-            <li><a href="shipping.html" class='nav-link'>Shipping Addresses</a> View and manage my shipping addresses</li>
+            <li><a href="shipping.html" class='nav-link'>Shipping Addresses</a> View and manage my shipping addresses
+            </li>
             <li><a href="settings.html" class='nav-link'>Settings</a> Change Account Settings</li>
             <li><a href="reviews.html" class='nav-link'>Reviews</a> View product reviews I've made and write new ones
             </li>
@@ -110,7 +111,7 @@
         <h3>Introduction</h3>
 
         <!-- Content -->
-        <p class='welcome-message'>Welcome to your account management screen.  Please login below.</p>
+        <p class='welcome-message'>Welcome to your account management screen. Please login below.</p>
 
         <div>
           <span class="info"></span>
@@ -120,18 +121,34 @@
         </div>
 
         <div id='login-form'>
-          Please login to access your account.
-          <div class='login-form-row'><label for="email">Email Address:</label><input type="text" id="email" size="30"
-                                                                                      class='login-field'/></div>
-          <div class='login-form-row'><label for="password">Password:</label><input type="password" id="password"
-                                                                                    size="30" class='login-field'/>
+          <strong>Login</strong> to access your account
+          <div class='login-form-row'><label for="email">Email Address:</label>
+            <input type="text" id="email" size="30" class='login-field'/>
+          </div>
+          <div class='login-form-row'><label for="password">Password:</label>
+            <input type="password" id="password" size="30" class='login-field'/>
           </div>
           <div class='login-form-row'>
             <input type="button" value="Login" id="login-button" class='login-button'/>
             <input type="button" value="Email Password" id="email-password-button" class='login-button'/>
           </div>
-
         </div>
+        <div id='register-form'>
+          <strong>Register</strong> to create a new Account
+          <div class='register-form-row'><label for="email">Email Address:</label>
+            <input type="text" id="register-email" size="30" class='register-field'/>
+          </div>
+          <div class='register-form-row'><label for="password">Password:</label>
+            <input type="password" id="register-password" size="30" class='register-field'/>
+          </div>
+          <div class='register-form-row'><label for="password">Password Again:</label>
+            <input type="password" id="register-password-again" size="30" class='register-field'/>
+          </div>
+          <div class='register-form-row'>
+            <input type="button" value="Register" id="register-button" class='register-button'/>
+          </div>
+        </div>
+        <div style='clear:both'></div>
 
         <div id='recent-activity'></div>
 

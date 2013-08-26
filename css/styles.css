@@ -109,9 +109,11 @@ footer {
   display: none;
   border: 1px solid #D0D0D0;
   border-radius: 5px;
-  margin: 10px 0;
+  margin: 10px 5px;
+  height: 150px;
   padding: 10px;
   width: 400px;
+  float:left;
 }
 
 .login-form-row {
@@ -122,6 +124,30 @@ footer {
   display: inline-block;
   width: 120px;
 }
+
+
+#register-form {
+  display: none;
+  border: 1px solid #D0D0D0;
+  border-radius: 5px;
+  margin: 10px 5px;
+  height: 150px;
+  padding: 10px;
+  width: 400px;
+  float:left;
+}
+
+.register-form-row {
+  padding: 5px 0;
+}
+
+.register-form-row label {
+  display: inline-block;
+  width: 120px;
+}
+
+
+
 
 .info, .success, .warning, .error, .validation {
   border: 1px solid;
