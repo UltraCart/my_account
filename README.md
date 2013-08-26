@@ -1,7 +1,7 @@
 my_account
 ==========
 
-Version 0.5 BETA
+Version 0.6 BETA
 
 Customer Portal for UltraCart merchants
 
@@ -25,6 +25,12 @@ var restUrl = i_am_using_a_proxy ? pathToProxy + '?_url=/rest/myaccount' : '/res
 
 
 var merchantId = 'DEMO'; // you should change this.
+
+
+Change Log
+===============
+v0.5 - Initial version
+v0.6 - Added 'register new account' feature on main page.
 
 
 Demo
