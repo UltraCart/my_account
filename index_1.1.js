@@ -101,6 +101,18 @@ function register() {
   var password = jQuery.trim(jQuery('#register-password').val());
   var passwordAgain = jQuery.trim(jQuery('#register-password-again').val());
 
+  var redirectUrl = null;
+  var redirectUrlEl = jQuery('#redirect-url');
+  if (redirectUrlEl) {
+    redirectUrl = redirectUrlEl.val();
+  } else {
+    redirectUrl = location.href;
+    redirectUrl += redirectUrl.indexOf('?') > -1 ? "&validated=true" : "?validated=true";
+  }
+
+  var themeCode = null; // theme code is only useful for MyAccount portals hosted on the UltraCart, which this code base is not intended for.
+
+
   if (!email || !password || !passwordAgain) {
     showError("All fields are required to register.");
     return;
@@ -120,21 +132,8 @@ function register() {
   ultracart.myAccount.createAccount(settings, {
     success: function () {
 
-      // now I'll need to login.
-      ultracart.myAccount.login(email, password, {
-        success: function () {
-          location.href = 'settings.html'; // take them to the settings page to fill out the rest.
-        },
-        failure: function (textStatus) {
-          var message = jqXHR.getResponseHeader('UC-REST-ERROR');
-          if (!message) {
-            message = textStatus;
-          }
-
-          showError("Your registration was successful, but you could not be logged in (reason=" + message + ").  Please login to continue.");
-          enableButtons();
-        }
-      });
+      showInfo(msg);
+      enableButtons();
 
     },
     failure: function (jqXHR, textStatus) {
@@ -145,7 +144,9 @@ function register() {
 
       showError("Registration failed with the following message: " + message);
       enableButtons();
-    }
+    },
+    redirectUrl: redirectUrl,
+    themeCode: themeCode
   });
 }
 
@@ -194,5 +195,13 @@ jQuery(document).ready(function () {
   jQuery('#register-button').bind('click', register);
   jQuery('#email-password-button').bind('click', emailPassword);
   jQuery('.nav-logout a').bind('click', logout);
+
+  // if you provide a custom redirect url, you'll probably want to que off something other than this parameter.
+  if(location.href.indexOf("validated=true") > -1){
+    showSuccess("Your email was validated.  Please login.");
+  }
+
+
+
 
 });

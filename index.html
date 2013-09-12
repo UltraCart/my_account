@@ -17,9 +17,9 @@
   <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
   <script type="text/javascript" src="js/moment.js"></script>
   <script type="text/javascript" src="js/handlebars_1.0.js"></script>
-  <script type="text/javascript" src="js/myaccount_rest_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount_rest_1.1.js"></script>
   <script type="text/javascript" src="js/myaccount.js"></script>
-  <script type="text/javascript" src="index.js"></script>
+  <script type="text/javascript" src="index_1.1.js"></script>
 
   <script type="text/template" id="recent-orders-template">
     <h4>Recent Activity</h4>
@@ -61,33 +61,21 @@
 </head>
 <body>
 
-<!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
-<!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
 <header role="banner">
   <img src='images/logo.png' alt='store logo' class='logo-image'/>
 
   <h2>UltraCart Store - My Account</h2>
-  <nav role="navigation">
-    <!-- This can contain your site navigation either in an unordered list or even a paragraph that contains links that allow users to navigate your site -->
-  </nav>
+  <nav role="navigation"></nav>
 
 </header>
 
 <div class="wrap content">
 
-  <!-- The <main> element is used to enclose the main content, i.e. that which contains the central topic of a document -->
-  <!-- ARIA: the landmark role "main" is added here as it contains the main content of the document, and it is recommended to add it to the
-  <main> element until user agents implement the required role mapping. -->
   <main role="main">
 
-    <!-- The <section> element can be used to enclose content that comes under a related heading.
-    NOTE: The <section> element can contain <article> elements and vice versa, if you think the content warrants it. -->
     <section>
 
-      <!-- This is the section's header. It contains the heading and navigation links for within the section -->
       <header>
-        <!--<h2>Getting Started</h2>-->
-        <!-- ARIA: the landmark role "navigation" is added here as the element contains page navigation -->
         <nav role="navigation">
           <ul>
             <li><a href="password.html" class='nav-link'>Password</a> Change my Password</li>
@@ -104,13 +92,10 @@
         </nav>
       </header>
 
-      <!-- The <article> element can be used to enclose content that still makes sense on its own and is therefore "reusable" -->
       <article id="introduction">
 
-        <!-- A <header> element is not required here as the heading only contains a single <h3> element -->
         <h3>Introduction</h3>
 
-        <!-- Content -->
         <p class='welcome-message'>Welcome to your account management screen. Please login below.</p>
 
         <div>
@@ -137,6 +122,9 @@
           <strong>Register</strong> to create a new Account
           <div class='register-form-row'><label for="email">Email Address:</label>
             <input type="text" id="register-email" size="30" class='register-field'/>
+            <!-- override the default redirect url (this same page) by populating this value.  any url put here must be in your list (secure.ultracart.com->Home->Customer Profiles->) -->
+            <!-- if you override this value, you'll probably need to adjust the jQuery.ready at the bottom of index_X.X.js, unless you have ?validated=true in your url as a que to display a success message. -->
+            <input type='hidden' id='redirect-url' value=''/>
           </div>
           <div class='register-form-row'><label for="password">Password:</label>
             <input type="password" id="register-password" size="30" class='register-field'/>

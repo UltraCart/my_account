@@ -256,21 +256,30 @@ ultracart.MyAccount = function (merchantId) {
        customerInformation['merchantId'] = this.merchantId;
      }
 
-    var account = null;
+    var msg = null;
+
+    var params = null;
+    if(options.redirectUrl){
+      params = 'redirectUrl=' + encodeURIComponent(options.redirectUrl);
+    }
+    if(options.themeCode){
+      params = (params != null ? (params + '&') : '');
+      params += 'themeCode=' + encodeURIComponent(options.themeCode);
+    }
 
     jQuery.ajax({
-      url: restUrl + '/settings',
+      url: restUrl + '/settings' + (params != null ? ('?' + params) : ''),
       data: JSON.stringify(customerInformation),
       type: 'post',
       async: (options.success || options.failure) ? true : false,
       headers: { "cache-control": "no-cache" },
       cache: false,
       contentType: 'application/json; charset=UTF-8',
-      dataType: 'json'
+      dataType: 'text'
     }).done(function (result) {
-              account = result;
+              msg = result;
               if (options.success) {
-                options.success(account);
+                options.success(msg);
               }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
@@ -279,7 +288,7 @@ ultracart.MyAccount = function (merchantId) {
               }
             });
 
-    return account;
+    return msg;
   };
 
 
