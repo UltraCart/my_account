@@ -275,9 +275,9 @@ ultracart.MyAccount = function (merchantId) {
       headers: { "cache-control": "no-cache" },
       cache: false,
       contentType: 'application/json; charset=UTF-8',
-      dataType: 'text'
+      dataType: 'json'
     }).done(function (result) {
-              msg = result;
+              msg = result.message;
               if (options.success) {
                 options.success(msg);
               }
