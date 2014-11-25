@@ -130,7 +130,7 @@ function register() {
   //noinspection JSUnusedLocalSymbols
   var settings = {'email': email, 'password': password};
   ultracart.myAccount.createAccount(settings, {
-    success: function () {
+    success: function (msg) {
 
       showInfo(msg);
       enableButtons();
