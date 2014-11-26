@@ -95,8 +95,8 @@ function bindFields() {
     window.history.back();
   });
 
-  jQuery('#saveButton').unbind().bind('click', updatePassword);
-  jQuery('#newPassword').unbind().bind('keypress', passwordStrength);
+  jQuery('#saveButton').unbind().bind('click', updatePassword());
+  jQuery('#newPassword').unbind().bind('keypress', passwordStrength());
 
 }
 
