@@ -115,12 +115,12 @@ function register() {
 
   if (!email || !password || !passwordAgain) {
     showError("All fields are required to register.");
-    return;
+    return false;
   }
 
-  if (password != passwordAgain) {
+  if (password !== passwordAgain) {
     showError("Passwords do not match.  Please re-type your password in both fields.");
-    return;
+    return false;
   }
 
 
