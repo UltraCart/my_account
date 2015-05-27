@@ -33,6 +33,11 @@ body {
   font-size: 0.9em;
 }
 
+/* needed for hosted fields or chrome makes the iframe overlay inputs look like junk */
+select, input{
+    border: 1px solid rgb(169, 169, 169);
+  }
+
 .logo-image {
 
 }
@@ -443,6 +448,65 @@ img.stars-5{
   height:18px;
   background:url(../images/star_ratings.gif) 0 29px;
  }
+
+
+.review-info h4, .review-info .review-buttons-container{
+  margin-top: 15px;
+}
+
+.nickname-note, .review-note, .store-recommend-note{
+  font-size: 0.8em;
+  font-style: italic;
+  display: block;
+  clear: both;
+}
+
+#storeFeedback, .review-info .review-details-label, .review-details-container input, .review-info .terms-conditions-agree{
+  display:block;
+  clear:both;
+}
+
+
+.wishlistNavigationTable {
+  width: 100%;
+}
+
+.wishlistNavigationWrapper {
+  border: 1px solid #D0D0D0;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.wishlistNavigationTableSearchCell {
+  width: 50%;
+  text-align: left;
+}
+
+.wishlistNavigationTableFilterCell {
+  width: 50%;
+  text-align: right;
+}
+
+.wishlistPaginationTable {
+  width: 100%;
+}
+
+.wishlistPaginationTableSearchCell {
+  width: 50%;
+  text-align: left;
+}
+
+.wishlistPaginationTableFilterCell {
+  width: 50%;
+  text-align: right;
+}
+
+
+.wishlist-header, .wishlist-footer {
+  margin: 10px 0;
+  width: 100%;
+}
+
 
 
 /*==================== Ajax Please Wait ====================*/

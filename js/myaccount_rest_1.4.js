@@ -1,7 +1,80 @@
 var pathToProxy = '/my_account/rest_proxy.php';  // relative or absolute.  it doesn't matter.  this file must exist on your server.
 var i_am_using_a_proxy = true;  // set to true if running on your own server.  if hosted by ultracart, set to false.
 var restUrl = i_am_using_a_proxy ? pathToProxy + '?_url=/rest/myaccount' : '/rest/myaccount';  // you shouldn't change this.
+var restCartUrl = i_am_using_a_proxy ? pathToProxy + "?_url=/rest/cart" : '/rest/cart'; // only needed for the add wishlist item to cart routine.
 var merchantId = 'DEMO'; // you should change this.
+
+
+// handlebars helpers
+Handlebars.registerHelper('checkedIfTheseAreEqual', function (value, target, options) {
+  var checkboxHtml = options.fn(this); // this will evaluate the block inside this helper and return the output.
+  // find the /> and insert selected='selected' if valid.
+  if (value && target && value == target) {
+    checkboxHtml = checkboxHtml.replace("/>", " checked='checked'/>");
+  }
+  return checkboxHtml;
+});
+
+
+Handlebars.registerHelper('compare', function (lvalue, rvalue, options) {
+
+  if (arguments.length < 3)
+    throw new Error("Handlebars Helper 'compare' needs 2 parameters");
+
+  operator = options.hash.operator || "==";
+
+  var operators = {
+    '==': function (l, r) {
+      return l == r;
+    },
+    '===': function (l, r) {
+      return l === r;
+    },
+    '!=': function (l, r) {
+      return l != r;
+    },
+    '<': function (l, r) {
+      return l < r;
+    },
+    '>': function (l, r) {
+      return l > r;
+    },
+    '<=': function (l, r) {
+      return l <= r;
+    },
+    '>=': function (l, r) {
+      return l >= r;
+    },
+    'typeof': function (l, r) {
+      return typeof l == r;
+    }
+  };
+
+  if (!operators[operator])
+    throw new Error("Handlebars Helper 'compare' doesn't know the operator " + operator);
+
+  var result = operators[operator](lvalue, rvalue);
+
+  if (result) {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
+
+/**
+ * ucSelectOption2 takes a target value to compare
+ */
+Handlebars.registerHelper('createSelectOption', function (value, target, options) {
+  var html = "<option value='" + Handlebars.Utils.escapeExpression(value) + "'";
+  if (value && target && value == target) {
+    html += " selected='selected'";
+  }
+  html += ">" + Handlebars.Utils.escapeExpression(options.fn(this)) + "</option>";
+  return html;
+});
+
 
 
 // requires jQuery 1.7.2+
@@ -1076,6 +1149,9 @@ ultracart.MyAccount = function (merchantId) {
     var data = {};
     data['pageNumber'] = options.pageNumber || '';
     data['pageSize'] = options.pageSize || '';
+    data['thumbnailWidth'] = options.thumbnailWidth || 80;
+    data['thumbnailHeight'] = options.thumbnailHeight || 80;
+    data['thumbnailSquare'] = options.thumbnailSquare || 'true';
 
     var reviews = [];
     var pagination = {};
@@ -1100,6 +1176,9 @@ ultracart.MyAccount = function (merchantId) {
               }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR);
+              console.log(textStatus);
+              console.log(errorThrown);
               if (options.failure) {
                 options.failure(textStatus, errorThrown);
               }
@@ -1244,6 +1323,315 @@ ultracart.MyAccount = function (merchantId) {
 
     return orderCaseMessage;
 
+  };
+
+
+  /**
+   * returns back pagination of the wish list, the success callback will
+   * receive 1) wish list, 2) pagination object (pageSize,pageNumber,totalRecords,totalPages)
+   * @param [options] success and failure callbacks, 'pageNumber' and 'pageSize'
+   * @return Object no callbacks specified, this returns back an object containing 'wishlist' and 'pagination' of wish list (on success), else null
+   */
+  this.getWishlist = function (options) {
+
+    options = options || {};
+
+
+    var data = {};
+    data['pageNumber'] = options.pageNumber || '';
+    data['pageSize'] = options.pageSize || '';
+    data['thumbnailWidth'] = options.thumbnailWidth || '';
+    data['thumbnailHeight'] = options.thumbnailWidth || '';
+    data['thumbnailSquare'] = options.thumbnailSquare || '';
+    data['sortBy'] = options.sortBy || '';
+
+    var wishlist = [];
+    var pagination = {};
+
+    jQuery.ajax({
+      url: restUrl + '/wishlist',
+      type: 'get',
+      data: data,
+      async: (options.success || options.failure) ? true : false,
+      headers: { "cache-control": "no-cache" },
+      cache: false,
+      dataType: 'json'
+    }).done(function (result, textStatus, jqXHR) {
+              wishlist = result;
+              pagination['pageSize'] = parseInt(jqXHR.getResponseHeader('uc-pagination-page-size'));
+              pagination['pageNumber'] = parseInt(jqXHR.getResponseHeader('uc-pagination-page-number'));
+              pagination['totalRecords'] = parseInt(jqXHR.getResponseHeader('uc-pagination-total-records'));
+              pagination['totalPages'] = parseInt(jqXHR.getResponseHeader('uc-pagination-total-pages'));
+
+              if (options.success) {
+                options.success(wishlist, pagination);
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              if (options.failure) {
+                options.failure(textStatus, errorThrown);
+              }
+            });
+
+    return {wishlist: wishlist, pagination: pagination};
+
+};
+
+
+  /**
+   * returns a wish list item,
+   * @param wishlistOid the unique id for a wish list item
+   * @param [options] success and failure callbacks
+   * @return Object if no callbacks specified, this returns back an wish list item, else null
+
+   */
+  this.getWishlistItem = function (wishlistOid, options) {
+
+    options = options || {};
+
+
+    var wishlistItem = null;
+
+    jQuery.ajax({
+      url: restUrl + '/wishlist/' + wishlistOid,
+      async: (options.success || options.failure) ? true : false,
+      headers: { "cache-control": "no-cache" },
+      cache: false,
+      dataType: 'json'
+    }).done(function (result) {
+              wishlistItem = result;
+              if (options.success) {
+                options.success(wishlistItem);
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              if (options.failure) {
+                options.failure(textStatus, errorThrown);
+              }
+            });
+
+    return wishlistItem;
+  };
+
+
+  /**
+   * @param wishlistOid the unique identifier of the wish list item to be deleted
+   * deletes a wish list item in the wish list
+   * @param [options] success and failure callbacks
+   */
+  this.deleteWishlistItem = function (wishlistOid, options) {
+
+    options = options || {};
+
+    jQuery.ajax({
+      url: restUrl + '/wishlist/' + wishlistOid,
+      type: 'delete',
+      async: (options.success || options.failure) ? true : false,
+      headers: { "cache-control": "no-cache" },
+      cache: false,
+      dataType: 'json'
+    }).done(function () {
+              if (options.success) {
+                options.success();
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              if (options.failure) {
+                options.failure(jqXHR, textStatus, errorThrown);
+              }
+            });
+
+  };
+
+
+  /**
+   * @param wishlistItem the wish list item to be inserted
+   * adds a wish list item to the wish list
+   * @param [options] success and failure callbacks
+   * @return Object the wishlistItem object with the updated oid (object identifier), unless callbacks
+
+   */
+  this.insertWishlistItem = function (wishlistItem, options) {
+
+    options = options || {};
+    var insertedWishlistItem = null; // will contain oid when populated
+
+    jQuery.ajax({
+      url: restUrl + '/wishlist',
+      type: 'post',
+      data: JSON.stringify(wishlistItem),
+      async: (options.success || options.failure) ? true : false,
+      headers: { "cache-control": "no-cache" },
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      dataType: 'json'
+    }).done(function (result) {
+              insertedWishlistItem = result;
+              if (options.success) {
+                options.success(insertedWishlistItem);
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              if (options.failure) {
+                options.failure(jqXHR, textStatus, errorThrown);
+              }
+            });
+
+    return insertedWishlistItem;
+
+  };
+
+
+  /**
+   * @param wishlistItem the wish list item to be updated
+   * updates a wish list item in the wish list
+   * @param [options] success and failure callbacks
+   * @returns Object returns the same object passed since the server doesn't update the object in any way because
+   * the only fields that can be updated are priority and comments.
+   */
+  this.updateWishlistItem = function (wishlistItem, options) {
+
+    options = options || {};
+    //noinspection JSUnusedLocalSymbols
+    var updatedWishlistItem = wishlistItem;  // notice: in == out
+
+    jQuery.ajax({
+      url: restUrl + '/wishlist/' + wishlistItem.wishlistOid,
+      type: 'put',
+      data: JSON.stringify(wishlistItem),
+      async: (options.success || options.failure) ? true : false,
+      headers: { "cache-control": "no-cache" },
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      dataType: 'json'
+    }).done(function (result) {
+//              updatedWishlistItem = result;
+              if (options.success) {
+                options.success(updatedWishlistItem);
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              if (options.failure) {
+                options.failure(jqXHR, textStatus, errorThrown);
+              }
+            });
+
+    return updatedWishlistItem;
+  };
+
+
+  /**
+   * @param itemId the item to be added to the cart.
+   * adds an item to the shopping cart.
+   * @param [options] success and failure callbacks
+   */
+  this.addWishlistItemToCart = function (itemId, options) {
+
+    jQuery.ajax({
+      url: restCartUrl,
+      headers: { "cache-control": "no-cache"},
+      dataType: 'json'
+    }).done(function (cart) {
+              if (!cart.items) {
+                cart.items = [];
+              }
+              cart.items.push({'itemId': itemId, 'quantity': 1});
+
+              jQuery.ajax({
+                url: '/rest/cart',
+                type: 'PUT', // Notice
+                headers: { "cache-control": "no-cache" },
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(cart),
+                dataType: 'json'
+              }).done(function (updatedCart) {
+                        if (options.success) {
+                          options.success(updatedCart);
+                        }
+                      })
+                      .fail(function (jqXHR, textStatus, errorThrown) {
+                        if (options.failure) {
+                          options.failure(jqXHR, textStatus, errorThrown);
+                        }
+                      });
+
+            });
+
+
+  };
+
+
+  /**
+   * returns an item review,
+   * @param itemId the item id of the item to be reviewed.
+   * @param [options] success and failure callbacks
+   * @return Object if no callbacks specified, this returns back an item review, else null
+
+   */
+  this.getReview = function (itemId, options) {
+
+    options = options || {};
+
+
+    var itemReview = null;
+
+    jQuery.ajax({
+      // this will fail if someone puts crazy stuff in their item ids...
+      url: restUrl + '/reviews/' + itemId,
+      async: (options.success || options.failure) ? true : false,
+      headers: { "cache-control": "no-cache" },
+      cache: false,
+      dataType: 'json'
+    }).done(function (result) {
+              itemReview = result;
+              if (options.success) {
+                options.success(itemReview);
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              if (options.failure) {
+                options.failure(textStatus, errorThrown);
+              }
+            });
+
+    return itemReview;
+  };
+
+
+  /**
+   * @param itemReview the item review to be updated
+   * updates an item review in the database
+   * @param [options] success and failure callbacks
+   * @returns Object returns the itemReview object
+   */
+  this.updateReview = function (itemReview, options) {
+
+    options = options || {};
+    //noinspection JSUnusedLocalSymbols
+    var updatedItemReview = null;
+
+    jQuery.ajax({
+      url: restUrl + '/reviews/' + itemReview.itemId,
+      type: 'put',
+      data: JSON.stringify(itemReview),
+      async: (options.success || options.failure) ? true : false,
+      headers: { "cache-control": "no-cache" },
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      dataType: 'json'
+    }).done(function (result) {
+              updatedItemReview = result;
+              if (options.success) {
+                options.success(updatedItemReview);
+              }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+              if (options.failure) {
+                options.failure(jqXHR, textStatus, errorThrown);
+              }
+            });
+
+    return updatedItemReview;
   };
 
 

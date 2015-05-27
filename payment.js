@@ -30,6 +30,55 @@ theDocument.ajaxError(function (event, xhr) {
 
 jQuery.ajaxSetup({ cache: false });
 
+
+// ===============================================================================
+//  BEGIN PCI 3.0 compliance code
+//  What you might need to change:
+//     the selector properties point to the two credit card fields.  If you change the
+//     ids of the fields, you need to re-point those selectors at the fields properly.
+//  See also:
+//  http://docs.ultracart.com/display/ucdoc/UltraCart+Hosted+Credit+Card+Fields
+// ===============================================================================
+  var hostedFields = null;
+
+  // setup should be called each time the UI updates.
+  function setupSecureCreditCardFields() {
+  // set this to true to see verbose debugging.  usually only UltraCart support will use this.
+    window.ultraCartHostedFieldsDebugMode = false;
+    hostedFields = UltraCartHostedFields.setup(jQuery, JSON3, {
+      'sessionCredentials': {
+        'merchantId': merchantId
+      },
+      'hostedFields': {
+        'creditCardNumber': {
+          'selector': '#cardNumber'
+          ,'callback': function(card){
+            if(card && card.token){
+              var tokenField = jQuery('#creditCardNumberToken');
+              if(tokenField && tokenField.length){
+                tokenField.val(card.token);
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+
+  // teardown should be called each time a UI needs destroying.
+  function teardownSecureCreditCardFields() {
+    if (hostedFields != null) {
+      hostedFields.destroy();
+      hostedFields = null;
+    }
+  }
+
+// ==========================================================================
+// END PCI 3.0 compliance code
+// ==========================================================================
+
+
 function initialize() {
 
   // find the card record id (if edit).
@@ -46,6 +95,7 @@ function initialize() {
 
 
 function loadCreditCard(id) {
+  teardownSecureCreditCardFields();
   var html = '';
 
   var years = [];
@@ -68,6 +118,7 @@ function loadCreditCard(id) {
         }
         jQuery('#payment').html(html);
         bindFields();
+        setupSecureCreditCardFields();
       }
     });
 
@@ -75,6 +126,7 @@ function loadCreditCard(id) {
     html = templates.payment({years: years});
     jQuery('#payment').html(html);
     bindFields();
+    setupSecureCreditCardFields();
   }
 }
 
@@ -83,13 +135,21 @@ function updatePayment() {
 
   // validate the fields
   var id = jQuery.trim(jQuery('#id').val());
-  var merchantId = jQuery.trim(jQuery('#merchantId').val());
-  var customerProfileId = jQuery.trim(jQuery('#customerProfileId').val());
+  var merchantId = jQuery.trim(jQuery('#merchantId').val()); // this is overwritten at the server for security sake...
+  var customerProfileId = jQuery.trim(jQuery('#customerProfileId').val()); // this is double checked at the server level
 
   var cardType = jQuery.trim(jQuery('#cardType').val());
   var cardExpMonth = jQuery.trim(jQuery('#cardExpMonth').val());
   var cardExpYear = jQuery.trim(jQuery('#cardExpYear').val());
-  var cardNumber = jQuery.trim(jQuery('#cardNumber').val());
+//  var cardNumber = jQuery.trim(jQuery('#cardNumber').val());
+  var tokenField = jQuery('#creditCardNumberToken');
+
+  // this may not be present on fields immediately.  it will eventually.
+  var creditCardNumberToken = null;
+  if(tokenField && tokenField.length){
+    creditCardNumberToken = jQuery.trim(tokenField.val());
+  }
+
 
   if (!cardType) {
     showError("Card Type is a required field.");
@@ -106,7 +166,7 @@ function updatePayment() {
     return;
   }
 
-  if (!cardNumber) {
+  if (!id && !creditCardNumberToken) {
     showError("Card Number is a required field.");
     return;
   }
@@ -124,7 +184,8 @@ function updatePayment() {
     cardType: cardType,
     cardExpMonth: parseInt(cardExpMonth),
     cardExpYear: parseInt(cardExpYear),
-    cardNumber: cardNumber
+//    cardNumber: cardNumber,
+    creditCardNumberToken: creditCardNumberToken
   };
 
   ultracart.myAccount[functionName](creditCard, {

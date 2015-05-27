@@ -117,7 +117,9 @@ app.views.NotReviewedYet = Backbone.View.extend({
   },
 
   'redirectToReview': function (event) {
-    location.href = "https://secure.ultracart.com/cgi-bin/UCReviewItem?merchantId=" + encodeURIComponent(this.model.get('merchantId')) + "&itemId=" + encodeURIComponent(this.model.get('itemId'));
+    event.preventDefault();
+    event.stopPropagation();
+    location.href = "review.html?merchantId=" + encodeURIComponent(this.model.get('merchantId')) + "&itemId=" + encodeURIComponent(this.model.get('itemId'));
   }
 
 

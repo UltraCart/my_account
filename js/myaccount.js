@@ -248,6 +248,31 @@ if (window.Handlebars) {
   });
 
 
+  /**
+   * ucSelectOption1 takes a conditional as the second argument
+   */
+  Handlebars.registerHelper('ucSelectOption1', function (value, conditional, options) {
+    var html = "<option value='" + Handlebars.Utils.escapeExpression(value) + "'";
+    if (conditional) {
+      html += " selected='selected'";
+    }
+    html += ">" + Handlebars.Utils.escapeExpression(options.fn(this)) + "</option>";
+    return html;
+  });
+
+  /**
+   * ucSelectOption2 takes a target value to compare
+   */
+  Handlebars.registerHelper('ucSelectOption2', function (value, target, options) {
+    var html = "<option value='" + Handlebars.Utils.escapeExpression(value) + "'";
+    if (value && target && value == target) {
+      html += " selected='selected'";
+    }
+    html += ">" + Handlebars.Utils.escapeExpression(options.fn(this)) + "</option>";
+    return html;
+  });
+
+
 }
 
 
@@ -318,7 +343,7 @@ if (window.Backbone) {
       this.url = function () {
         var pagedUrl = _.isFunction(_url) ? _url() : _url;
         if (this.queryParameters) {
-          if(pagedUrl.indexOf('?') > -1){
+          if (pagedUrl.indexOf('?') > -1) {
             pagedUrl += '&' + jQuery.param(this.queryParameters);
           } else {
             pagedUrl += '?' + jQuery.param(this.queryParameters);

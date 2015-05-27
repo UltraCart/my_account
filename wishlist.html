@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"> <!-- Set this to the main language of your site -->
+<head>
+  <meta charset="utf-8">
+  <title>Wishlist - My Account</title>
+  <meta name="description" content="Manage My Wishlist">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="css/normalize.css" rel="stylesheet" media="all">
+  <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+  <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+
+  <link href="css/styles.css" rel="stylesheet" media="all">
+  <!--[if lt IE 9]>
+  <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+  <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+  <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="js/moment.js"></script>
+  <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+  <script type="text/javascript" src="js/underscore_1.4.4.js"></script>
+  <script type="text/javascript" src="js/backbone_1.0.js"></script>
+  <script type="text/javascript" src="js/myaccount_rest_1.4.js"></script>
+  <script type="text/javascript" src="js/myaccount.js"></script>
+  <script type="text/javascript" src="wishlist.js"></script>
+
+  <script type="text/template" id="wishlist-template">
+    {{#if loading}}
+    Please wait. We're loading your wishlist now.<br>
+    <img src='images/jquery.smallhbar.indicator.gif'/>
+    {{else}}
+
+    <section>
+
+      <header class='wishlist-header'>
+        <nav role="navigation">
+          {{#if showPagination}}
+
+          <table class='wishlistPaginationTable'>
+            <tr>
+              <td class='wishlistPaginationTableSearchCell'>
+                <strong>{{totalRecords}}</strong> wishlist records. Showing items
+                {{firstRecordOnPage}}-{{lastRecordOnPage}}
+              </td>
+              <td class='wishlistPaginationTableFilterCell'>
+                {{#if showGotoPage}}
+                {{#if showPrevious}}<a class="wishlistNavCell" href="#">Previous</a> &lt;&lt; {{/if}}
+                <strong>Page {{pageNumber}} of {{totalPages}}</strong>
+                {{#if showNext}} &gt;&gt; <a class="wishlistNavCell" href="#">Next</a>{{/if}}
+                {{/if}}
+              </td>
+            </tr>
+          </table>
+          {{/if}}
+        </nav>
+      </header>
+
+
+      <div id="wishlist-items">
+        <table>
+          <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Description</th>
+            <th>&nbsp;</th>
+            <th>Date Added</th>
+            <th>Priority</th>
+            <th>Comments</th>
+
+          </tr>
+
+          </thead>
+          <tbody>
+          {{#each wishlistItems}}
+          <tr id="wl_{{wishlistOid}}">
+            <td>{{item.itemId}}</td>
+            <td>{{item.description}}</td>
+            <td>{{#if item.defaultThumbnailSsl}}<img src="//secure.ultracart.com/thumbs/{{item.defaultThumbnailSsl}}">{{/if}}
+            </td>
+            <td>{{addDateFormatted}}</td>
+            <td>
+              <span class="priorityDisplay">{{priorityFormatted}}</span>
+              <select class="priorityEdit" style="display:none">
+                <option value="1">Lowest</option>
+                <option value="2">Low</option>
+                <option value="3">Medium</option>
+                <option value="4">High</option>
+                <option value="5">Highest</option>
+              </select>
+            </td>
+            <td>
+              <span class="commentsDisplay">{{comments}}</span>
+              <textarea class="commentsEdit" style="display:none"></textarea>
+            </td>
+            <td>
+              <input class="addWishlistItemToCartButton" type="button" data-oid="{{wishlistOid}}" value="Add to Cart">
+            </td>
+            <td>
+              <input class="editWishlistItemButton" type="button" data-oid="{{wishlistOid}}" value="Edit">
+              <input class="updateWishlistItemButton" type="button" data-oid="{{wishlistOid}}" value="Save"
+                     style="display:none">
+              <input class="cancelWishlistItemButton" type="button" data-oid="{{wishlistOid}}" value="Cancel"
+                     style="display:none">
+              <input class="deleteWishlistItemButton red" type="button" data-oid="{{wishlistOid}}" value="Delete">
+            </td>
+          </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <footer class='wishlist-footer'>
+        <nav role="navigation">
+          {{#if showPagination}}
+
+          <table class='wishlistPaginationTable'>
+            <tr>
+              <td class='wishlistPaginationTableFilterCell'>
+                {{#if showGotoPage}}
+                {{#if showPrevious}}<a class="wishlistNavCell" href="#">Previous</a> &lt;&lt; {{/if}}
+                <strong>Page {{pageNumber}} of {{totalPages}}</strong>
+                {{#if showNext}} &gt;&gt; <a class="wishlistNavCell" href="#">Next</a>{{/if}}
+                {{/if}}
+              </td>
+            </tr>
+          </table>
+          {{/if}}
+        </nav>
+      </footer>
+
+
+    </section>
+    {{/if}}
+  </script>
+
+
+</head>
+<body>
+
+<!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
+<!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
+<header role="banner">
+  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+
+  <div class='nav-bar'>
+    <h4><a href="index.html">My Account</a> &gt; <span class='disabled-looking'>My Wishlist</span></h4>
+    <nav role="navigation">
+      <div class='wishlistNavigationWrapper'>
+        <table class='wishlistNavigationTable'>
+          <td class='wishlistNavigationTableSortCell'>Sort wishlist by:
+            <select id="sortBySelect">
+              <option value="date_desc">Date Added (most recent first)</option>
+              <option value="date_asc">Date Added (earliest first)</option>
+              <option value="priority_desc">Priority (high to low)</option>
+              <option value="priority_asc">Priority (low to high)</option>
+              <option value="price_desc">Price (high to low)</option>
+              <option value="price_asc">Price (low to high)</option>
+            </select>
+            <input type="button" value="Go" id="sortWishlistButton"/>
+          </td>
+          </tr>
+        </table>
+      </div>
+    </nav>
+  </div>
+
+</header>
+
+
+<div class="wrap content">
+  <main role='main' id='wishlist'></main>
+</div>
+
+
+<footer role="contentinfo">
+  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2015' is a date -->
+  <small>Copyright www.ultracart.com &copy;
+    <time datetime="2015">2015</time>
+  </small>
+</footer>
+
+<!-- Google Analytics - Optimized version by Mathias Bynens -->
+<!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
+<!-- Change the UA-XXXX-XX string to your site's ID -->
+<script type='text/javascript'>
+  var _gaq = [
+    ['_setAccount', 'UA-XXXX-XX'],
+    ['_trackPageview']
+  ];
+  (function (a, b) {
+    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+    d.parentNode.insertBefore(c, d)
+  })(document, "script");
+</script>
+
+</body>
+</html>
