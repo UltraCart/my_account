@@ -115,12 +115,12 @@ function register() {
 
   if (!email || !password || !passwordAgain) {
     showError("All fields are required to register.");
-    return;
+    return false;
   }
 
-  if (password != passwordAgain) {
+  if (password !== passwordAgain) {
     showError("Passwords do not match.  Please re-type your password in both fields.");
-    return;
+    return false;
   }
 
 
@@ -130,7 +130,7 @@ function register() {
   //noinspection JSUnusedLocalSymbols
   var settings = {'email': email, 'password': password};
   ultracart.myAccount.createAccount(settings, {
-    success: function () {
+    success: function (msg) {
 
       showInfo(msg);
       enableButtons();
