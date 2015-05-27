@@ -1,8 +1,28 @@
-my_account
-==========
+#### my_account
 
-Version 1.0
-===========
+#### Working Demo
+A [demo of UltraCart MyAccount](http://secure.ultracart.com/merchant/integrationcenter/my_account_demo/index.html) shows the basic screens.  The problem with running the demo is that the data on it is quickly mangled by visitors, so there's little use in providing a canned login.  It only lasts a few hours.  Do not pull this demo down to use.  It has been modified to run on the UltraCart server.  Download the latest version directly from github.
+
+#### Getting Started
+1. Download the latest revision.
+2. Edit the file [js/myaccount_rest_1.4.js] and set the variables at the top.
+3. Make sure you install and test out the rest_proxy.php script, or nothing will work.
+4. Test rest_proxy.php by typing the full path to it (wherever you put it) in your web browser address bar.  
+
+   |URL|Expected Result|
+   |---|---------------|
+   |```rest_proxy.php```|"UltraCart rest proxy script called incorrectly.  _url query parameter is required.|
+   |```rest_proxy.php?_url=/rest/cart```|"Missing Merchant Id."|
+   |```rest_proxy.php?_url=/rest/cart&_mid=DEMO```|you should receive back the json for an empty cart|
+
+#### Version 2.0
+This is a mandatory update.  After July 15, 2015, any site without Hosted Fields will have a broken Payment edit screen.
+* PCI 3.0 Support using [UltraCart Hosted Fields](http://docs.ultracart.com/display/ucdoc/UltraCart+Hosted+Credit+Card+Fields).
+* Product Review screen is now part of the client.
+* Wishlist support
+
+#### Version 1.0
+
 
 Of this release, the changes in the rest_proxy.php script are most important.
 Please upgrade your rest_proxy.php scripts as soon as possible.  Doing so will prevent issues with your site.  Additionally,
@@ -28,34 +48,7 @@ This is a reference implementation for the new (as of June 2013) Customer Portal
 This portal will allow your customers to login, view order history, submit product reviews, manage
 addresses and credit cards, and submit feedback to you (case management).
 
-Getting Started
-===============
-Begin with myaccount_rest_X.X.js  (initial version was myaccount_rest_1.0.js)
-The first few lines contain settings to make the portal operational.
-Here are those lines:
-
-// relative or absolute.  it doesn't matter.  this file must exist on your server.
-var pathToProxy = '/my_account/rest_proxy.php';  
-// set to true if running on your own server.  if hosted by ultracart, set to false. (You'll want this to be true)
-var i_am_using_a_proxy = true;  
-
-// you shouldn't change this.
-var restUrl = i_am_using_a_proxy ? pathToProxy + '?_url=/rest/myaccount' : '/rest/myaccount';  
-
-
-var merchantId = 'DEMO'; // you should change this.
-
-
 Change Log
 ===============
 v0.5 - Initial version
 v0.6 - Added 'register new account' feature on main page.
-
-
-Demo
-====
-https://secure.ultracart.com/merchant/integrationcenter/my_account_demo/index.html
-
-MyAccount REST API
-==================
-Coming Soon
