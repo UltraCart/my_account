@@ -506,3 +506,24 @@ uc.commonFunctions.parseHttpParameters = function () {
   }
   return result;
 };
+
+function logout(event) {
+  event.stopPropagation();
+
+  //noinspection JSUnusedLocalSymbols
+  ultracart.myAccount.logout({
+    success: function (account) {
+      showSuccess("You were successfully logged out of your account.");
+      initialize();
+    },
+    failure: function (textStatus, errorThrown) {
+      showError("Logout failed.  Please refresh this page.");
+    }
+  });
+
+  return false;
+}
+
+jQuery(document).ready(function () {
+  jQuery('.nav-logout a').bind('click', logout);
+});

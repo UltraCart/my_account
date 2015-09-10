@@ -151,23 +151,6 @@ function register() {
 }
 
 
-function logout(event) {
-  event.stopPropagation();
-
-  //noinspection JSUnusedLocalSymbols
-  ultracart.myAccount.logout({
-    success: function (account) {
-      showSuccess("You were successfully logged out of your account.");
-      initialize();
-    },
-    failure: function (textStatus, errorThrown) {
-      showError("Logout failed.  Please refresh this page.");
-    }
-  });
-
-  return false;
-}
-
 function loadRecentOrders() {
   //noinspection JSUnusedLocalSymbols
   ultracart.myAccount.getOrders({
@@ -194,7 +177,6 @@ jQuery(document).ready(function () {
   jQuery('#login-button').bind('click', login);
   jQuery('#register-button').bind('click', register);
   jQuery('#email-password-button').bind('click', emailPassword);
-  jQuery('.nav-logout a').bind('click', logout);
 
   // if you provide a custom redirect url, you'll probably want to que off something other than this parameter.
   if(location.href.indexOf("validated=true") > -1){
