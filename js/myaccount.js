@@ -514,7 +514,7 @@ function logout(event) {
   ultracart.myAccount.logout({
     success: function (account) {
       showSuccess("You were successfully logged out of your account.");
-      initialize();
+      location.href = 'index.html';
     },
     failure: function (textStatus, errorThrown) {
       showError("Logout failed.  Please refresh this page.");
