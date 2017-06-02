@@ -2,268 +2,284 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
       xmlns="http://www.w3.org/1999/html"> <!-- Set this to the main language of your site -->
 <head>
-<meta charset="utf-8">
-<title>Product Review - My Account</title>
-<meta name="description" content="Add a Product Review">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Product Review - My Account</title>
+    <meta name="description" content="Add a Product Review">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="css/normalize.css" rel="stylesheet" media="all">
-<!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
-<!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+    <link href="css/normalize.css" rel="stylesheet" media="all">
+    <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+    <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
 
-<link href="css/styles.css" rel="stylesheet" media="all">
-<!--[if lt IE 9]>
-<script type='text/javascript' src="js/html5shiv-printshiv.js"></script><![endif]-->
-<script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
-<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
-<script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/handlebars_1.0.js"></script>
-<script type="text/javascript" src="js/underscore_1.4.4.js"></script>
-<script type="text/javascript" src="js/backbone_1.0.js"></script>
-<script type="text/javascript" src="js/myaccount_rest_1.4.js"></script>
-<script type="text/javascript" src="js/myaccount.js"></script>
-<script type="text/javascript" src="review.js"></script>
-
-
-<script type="text/template" id="item-review-template">
-
-<h4 class='review-product-header'>Product</h4>
-{{#if imageUrl}}
-<div class='review-item-image'>
-  <!--suppress HtmlUnknownTarget --><img src="{{imageUrl}}">
-</div>
-{{/if}}
-<div class='review-item-description'>{{description}}</div>
-<div class='review-item-extended-description'>{{extendedDescription}}</div>
+    <link href="css/styles.css" rel="stylesheet" media="all">
+    <!--[if lt IE 9]>
+    <script type='text/javascript' src="js/html5shiv-printshiv.js"></script><![endif]-->
+    <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+    <script type="text/javascript" src="js/underscore_1.4.4.js"></script>
+    <script type="text/javascript" src="js/backbone_1.0.js"></script>
+    <script type="text/javascript" src="js/myaccount_rest_1.4.js"></script>
+    <script type="text/javascript" src="js/myaccount.js"></script>
+    <script type="text/javascript" src="review.js"></script>
 
 
-<h4 class='product-rating-header'>Product Rating</h4>
+    <script type="text/template" id="item-review-template">
 
-<div class='product-rating-section'>
-  <!-- Table for the star selection -->
-  <table>
-    <tr>
-      <td>
+        <h4 class='review-product-header'>Product</h4>
+        {{#if imageUrl}}
+        <div class='review-item-image'>
+            <!--suppress HtmlUnknownTarget --><img src="{{imageUrl}}">
+        </div>
+        {{/if}}
+        <div class='review-item-description'>{{description}}</div>
+        <div class='review-item-extended-description'>{{extendedDescription}}</div>
 
-      </td>
-      {{#each scores}}
-      <td style="text-align:center">
-        <img src="//secure.ultracart.com/checkout/images/star.gif" alt="*"/>
-      </td>
-      {{/each}}
-      <td>
-      </td>
-    </tr>
 
-    {{#each ratings}}
-    <tr>
-      <td>{{name}}</td>
-      {{#each scores}}
-      <td style='text-align:center'>
-        {{#checkedIfTheseAreEqual this ../score}}<input type='radio' class="ratingScore" data-position="{{@index}}"
-                                                        value="{{this}}"/>{{/checkedIfTheseAreEqual}}
-      </td>
-      {{/each}}
-      <td>
-        (1=Worst; {{../ratingScaleMax}}=Best )
-      </td>
-    </tr>
-    {{/each}}
+        <h4 class='product-rating-header'>Product Rating</h4>
 
-    <tr>
-      <td></td>
-      {{#each scores}}
-      <td style='text-align:center'>{{this}}</td>
-      {{/each}}
-      <td>
-      </td>
-    </tr>
-  </table>
+        <div class='product-rating-section'>
+            <!-- Table for the star selection -->
+            <table>
+                <tr>
+                    <td>
 
-  <div class="recommend-to-friend">
-    I would recommend this product to a friend:
-    {{#checkedIfTheseAreEqual recommendToFriend 'true'}}<input type='radio' class="recommendToFriend" value="true"/>{{/checkedIfTheseAreEqual}}
-    Yes
-    {{#checkedIfTheseAreEqual recommendToFriend 'false'}}<input type='radio' class="recommendToFriend" value="false"/>{{/checkedIfTheseAreEqual}}
-    No
-  </div>
+                    </td>
+                    {{#each scores}}
+                    <td style="text-align:center">
+                        <img src="//secure.ultracart.com/checkout/images/star.gif" alt="*"/>
+                    </td>
+                    {{/each}}
+                    <td>
+                    </td>
+                </tr>
 
-</div>
+                {{#each ratings}}
+                <tr>
+                    <td>{{name}}</td>
+                    {{#each scores}}
+                    <td style='text-align:center'>
+                        {{#checkedIfTheseAreEqual this ../score}}<input type='radio' class="ratingScore"
+                                                                        data-position="{{@index}}"
+                                                                        value="{{this}}"/>{{/checkedIfTheseAreEqual}}
+                    </td>
+                    {{/each}}
+                    <td>
+                        (1=Worst; {{../ratingScaleMax}}=Best )
+                    </td>
+                </tr>
+                {{/each}}
 
-{{#if showNickname}}
-<div class='nickname-container'>
-  <span class='nickname-label'>Your Nickname:</span>
-  <input type='text' id="nickname" value="{{nickname}}" size="50" maxlength="25"/>
-      <span class='nickname-note'>
+                <tr>
+                    <td></td>
+                    {{#each scores}}
+                    <td style='text-align:center'>{{this}}</td>
+                    {{/each}}
+                    <td>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="recommend-to-friend">
+                I would recommend this product to a friend:
+                {{#checkedIfTheseAreEqual recommendToFriend 'true'}}<input type='radio' class="recommendToFriend"
+                                                                           value="true"/>{{/checkedIfTheseAreEqual}}
+                Yes
+                {{#checkedIfTheseAreEqual recommendToFriend 'false'}}<input type='radio' class="recommendToFriend"
+                                                                            value="false"/>{{/checkedIfTheseAreEqual}}
+                No
+            </div>
+
+        </div>
+
+        {{#if showNickname}}
+        <div class='nickname-container'>
+            <span class='nickname-label'>Your Nickname:</span>
+            <input type='text' id="nickname" value="{{nickname}}" size="50" maxlength="25"/>
+            <span class='nickname-note'>
         4-25 characters. This will be the nickname shown on all your future reviews. Please do not use your real name.
       </span>
-</div>
-{{/if}}
+        </div>
+        {{/if}}
 
 
-<div class='review-details-container'>
-  <h4 class="review-details-header">Review</h4>
-  <span class='review-title-label'>Review Title:</span>
-  <input type='text' id="title" value="{{title}}" size="50" maxlength="250"/>
-  <span class='review-details-label'>Review:</span>
-  <textarea id="review" rows="5" cols="80">{{review}}</textarea>
-    <span class='review-note'>
+        <div class='review-details-container'>
+            <h4 class="review-details-header">Review</h4>
+            <span class='review-title-label'>Review Title:</span>
+            <input type='text' id="title" value="{{title}}" size="50" maxlength="250"/>
+            <span class='review-details-label'>Review:</span>
+            <textarea id="review" rows="5" cols="80">{{review}}</textarea>
+            <span class='review-note'>
       If you write review text, it should be at least 50 characters, otherwise only your ratings will count.
     </span>
-</div>
+        </div>
 
 
-{{#if showProfileQuestions}}
-<h4 class="reviewer-profile-header">Reviewer Profile</h4>
-<table>
-  {{#if showLocation}}
-  <tr>
-    <td class="ucFormLabel" style='vertical-align:top;'>Location:</td>
-    <td>
-      <input type='text' id="location" value="{{location}}" size="50" maxlength="50"/>
-      <br/>Example: New York, NY
-    </td>
-  </tr>
-  {{/if}}
+        {{#if showProfileQuestions}}
+        <h4 class="reviewer-profile-header">Reviewer Profile</h4>
+        <table>
+            {{#if showLocation}}
+            <tr>
+                <td class="ucFormLabel" style='vertical-align:top;'>Location:</td>
+                <td>
+                    <input type='text' id="location" value="{{location}}" size="50" maxlength="50"/>
+                    <br/>Example: New York, NY
+                </td>
+            </tr>
+            {{/if}}
 
-  {{#each questions}}
-  <tr>
-    <td style='vertical-align:top'>{{question}}</td>
-    <td>
+            {{#each questions}}
+            <tr>
+                <td style='vertical-align:top'>{{question}}</td>
+                <td>
 
-      {{#compare format 'singe line' '=='}}
-      <input type='text' value="{{answer}}"
-             size="$question.size" maxlength="$question.maxLength" data-position="{{@index}}" class="answer"/>
-      {{/compare}}
+                    {{#compare format 'singe line' '=='}}
+                    <input type='text' value="{{answer}}"
+                           size="$question.size" maxlength="$question.maxLength" data-position="{{@index}}"
+                           class="answer"/>
+                    {{/compare}}
 
-      {{#compare format 'multiple line' '=='}}
-      <textarea data-position="{{@index}}" class="answer" rows="{{rows}}" cols="{{cols}}">{{answer}}</textarea>
-      {{/compare}}
+                    {{#compare format 'multiple line' '=='}}
+                    <textarea data-position="{{@index}}" class="answer" rows="{{rows}}"
+                              cols="{{cols}}">{{answer}}</textarea>
+                    {{/compare}}
 
-      {{#compare format 'drop down' '=='}}
-      <select data-position="{{@index}}" class="answer">
-        {{#each options}}
-        {{#createSelectOption this ../answer}}{{this}}{{/createSelectOption}}
-        {{/each}}
-      </select>
-      {{/compare}}
+                    {{#compare format 'drop down' '=='}}
+                    <select data-position="{{@index}}" class="answer">
+                        {{#each options}}
+                        {{#createSelectOption this ../answer}}{{this}}{{/createSelectOption}}
+                        {{/each}}
+                    </select>
+                    {{/compare}}
 
-    </td>
-  </tr>
-  {{/each}}
-</table>
-{{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+        {{/if}}
 
 
-{{#if showStoreSection}}
-<div class='review-store-section'>
-  <h4 class="review-store-header">Our Store</h4>
+        {{#if showStoreSection}}
+        <div class='review-store-section'>
+            <h4 class="review-store-header">Our Store</h4>
 
-  <div class='store-recommend-container'>
-    Would you recommend {{company}} to a friend?
-    <table>
-      <tr>
-        <td>0</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>10</td>
-      </tr>
-      <tr>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "0"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="0"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "1"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="1"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "2"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="2"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "3"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="3"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "4"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="4"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "5"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="5"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "6"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="6"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "7"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="7"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "8"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="8"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "9"}}<input type='radio' class="recommendStoreToFriend"
-                                                                       value="9"/>{{/checkedIfTheseAreEqual}}
-        </td>
-        <td>
-          {{#checkedIfTheseAreEqual recommendStoreToFriend "10"}}<input type='radio' class="recommendStoreToFriend"
-                                                                        value="10"/>{{/checkedIfTheseAreEqual}}
-        </td>
-      </tr>
-      <tr>
-        <td colspan="11">0 = Not Recommend, 10 = Highly Recommend</td>
-      </tr>
-    </table>
+            <div class='store-recommend-container'>
+                Would you recommend {{company}} to a friend?
+                <table>
+                    <tr>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "0"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="0"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "1"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="1"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "2"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="2"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "3"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="3"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "4"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="4"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "5"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="5"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "6"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="6"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "7"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="7"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "8"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="8"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "9"}}<input type='radio'
+                                                                                         class="recommendStoreToFriend"
+                                                                                         value="9"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                        <td>
+                            {{#checkedIfTheseAreEqual recommendStoreToFriend "10"}}<input type='radio'
+                                                                                          class="recommendStoreToFriend"
+                                                                                          value="10"/>{{/checkedIfTheseAreEqual}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="11">0 = Not Recommend, 10 = Highly Recommend</td>
+                    </tr>
+                </table>
 
-    <div class='store-recommend-why'>
-      <label class='store-recommend-why-label'>
-        Please tell us why:
-      </label>
-      <textarea rows="5" cols="80" id="storeFeedback">{{storeFeedback}}</textarea>
-          <span class='store-recommend-note'>
+                <div class='store-recommend-why'>
+                    <label class='store-recommend-why-label'>
+                        Please tell us why:
+                    </label>
+                    <textarea rows="5" cols="80" id="storeFeedback">{{storeFeedback}}</textarea>
+                    <span class='store-recommend-note'>
             (will not appear on our site)
           </span>
 
-    </div>
-  </div>
-</div>
-{{/if}}
+                </div>
+            </div>
+        </div>
+        {{/if}}
 
 
-<div class="terms-conditions-container">
-  <h4 class='terms-conditions-header'>Terms and Conditions</h4>
-  <textarea class="termsAndConditions" readonly="readonly" rows="5" cols="100"
-            style="width: 650px;">{{termsAndConditions}}</textarea>
-  <span class="terms-conditions-agree">
+        <div class="terms-conditions-container">
+            <h4 class='terms-conditions-header'>Terms and Conditions</h4>
+            <textarea class="termsAndConditions" readonly="readonly" rows="5" cols="100"
+                      style="width: 650px;">{{termsAndConditions}}</textarea>
+            <span class="terms-conditions-agree">
     {{#checkedIfTheseAreEqual agreeToTermsAndConditions 'true'}}<input type='checkbox' id="agreeToTermsAndConditions"/>{{/checkedIfTheseAreEqual}}
     I have read the terms and conditions and agree to them.
   </span>
-</div>
+        </div>
 
-<div>
-  <span class="info"></span>
-  <span class="success"></span>
-  <span class="warning"></span>
-  <span class="error"></span>
-</div>
+        <div>
+            <span class="info"></span>
+            <span class="success"></span>
+            <span class="warning"></span>
+            <span class="error"></span>
+        </div>
 
-<div class="review-buttons-container">
-  <button type="button" id="saveButton">Save Changes</button>
-  <button type="button" id="cancelButton" >Cancel</button>
-</div>
+        <div class="review-buttons-container">
+            <button type="button" id="saveButton">Save Changes</button>
+            <button type="button" id="cancelButton">Cancel</button>
+        </div>
 
-</script>
+    </script>
 
 
 </head>
@@ -272,50 +288,50 @@
 <!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
 <!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
 <header role="banner">
-  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+    <img src='images/logo.png' alt='store logo' class='logo-image'/>
 
-  <h2>UltraCart Store</h2>
-  <h4><a href="index.html">My Account</a> &gt; <span class='disabled-looking'>Product Review</span></h4>
+    <h2>UltraCart Store</h2>
+    <h4><a href="index.html">My Account</a> &gt; <span class='disabled-looking'>Product Review</span></h4>
 </header>
 
 <div class="wrap content">
-  <div>
-    <span class="info"></span>
-    <span class="success"></span>
-    <span class="warning"></span>
-    <span class="error"></span>
-  </div>
+    <div>
+        <span class="info"></span>
+        <span class="success"></span>
+        <span class="warning"></span>
+        <span class="error"></span>
+    </div>
 
 
-  <div id="review-container">
-    <h4>Review Your Purchase</h4>
+    <div id="review-container">
+        <h4>Review Your Purchase</h4>
 
-    <div class='review-info'></div>
-  </div>
+        <div class='review-info'></div>
+    </div>
 
 </div>
 
 
 <footer role="contentinfo">
-  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2015' is a date -->
-  <small>Copyright www.ultracart.com &copy;
-    <time datetime="2015">2015</time>
-  </small>
+    <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2015' is a date -->
+    <small>Copyright www.ultracart.com &copy;
+        <time datetime="2015">2015</time>
+    </small>
 </footer>
 
 <!-- Google Analytics - Optimized version by Mathias Bynens -->
 <!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
 <!-- Change the UA-XXXX-XX string to your site's ID -->
 <script type='text/javascript'>
-  var _gaq = [
-    ['_setAccount', 'UA-XXXX-XX'],
-    ['_trackPageview']
-  ];
-  (function (a, b) {
-    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
-    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
-    d.parentNode.insertBefore(c, d)
-  })(document, "script");
+    var _gaq = [
+        ['_setAccount', 'UA-XXXX-XX'],
+        ['_trackPageview']
+    ];
+    (function (a, b) {
+        var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+        c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+        d.parentNode.insertBefore(c, d)
+    })(document, "script");
 </script>
 
 </body>

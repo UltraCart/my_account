@@ -1,29 +1,28 @@
 #### my_account
 
-#### Working Demo
+###### Working Demo
 A [demo of UltraCart MyAccount](http://secure.ultracart.com/merchant/integrationcenter/my_account_demo/index.html) shows the basic screens.  The problem with running the demo is that the data on it is quickly mangled by visitors, so there's little use in providing a canned login.  It only lasts a few hours.  Do not pull this demo down to use.  It has been modified to run on the UltraCart server.  Download the latest version directly from github.
 
-#### Getting Started
+###### Getting Started
 1. Download the latest revision.
 2. Edit the file [js/myaccount_rest_1.4.js] and set the variables at the top.
-3. Make sure you install and test out the rest_proxy.php script, or nothing will work.
-4. Test rest_proxy.php by typing the full path to it (wherever you put it) in your web browser address bar.  
+3. ~~Make sure you install and test out the rest_proxy.php script, or nothing will work.~~
+4. ~~Test rest_proxy.php by typing the full path to it (wherever you put it) in your web browser address bar.~~  
 
-   |URL|Expected Result|
-   |---|---------------|
-   |```rest_proxy.php```|"UltraCart rest proxy script called incorrectly.  _url query parameter is required.|
-   |```rest_proxy.php?_url=/rest/cart```|"Missing Merchant Id."|
-   |```rest_proxy.php?_url=/rest/cart&_mid=DEMO```|you should receive back the json for an empty cart|
+#### Changelog
 
-#### Version 2.0
+###### Version 2.1
+* Removed rest_proxy.php
+* Enabled CORS support
+* This version will run on any web server.
+
+###### Version 2.0
 This is a mandatory update.  After July 15, 2015, any site without Hosted Fields will have a broken Payment edit screen.
 * PCI 3.0 Support using [UltraCart Hosted Fields](http://docs.ultracart.com/display/ucdoc/UltraCart+Hosted+Credit+Card+Fields).
 * Product Review screen is now part of the client.
 * Wishlist support
 
-#### Version 1.0
-
-
+###### Version 1.0
 Of this release, the changes in the rest_proxy.php script are most important.
 Please upgrade your rest_proxy.php scripts as soon as possible.  Doing so will prevent issues with your site.  Additionally,
 we've added a proxy version header that will allow us to track which merchants might have out of date proxy scripts in the

@@ -2,109 +2,109 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
       xmlns="http://www.w3.org/1999/html"> <!-- Set this to the main language of your site -->
 <head>
-  <meta charset="utf-8">
-  <title>Edit Credit Card - My Account</title>
-  <meta name="description" content="Add or Edit an Credit Card">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Edit Credit Card - My Account</title>
+    <meta name="description" content="Add or Edit an Credit Card">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="css/normalize.css" rel="stylesheet" media="all">
-  <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
-  <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+    <link href="css/normalize.css" rel="stylesheet" media="all">
+    <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+    <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
 
-  <link href="css/styles.css" rel="stylesheet" media="all">
-  <!--[if lt IE 9]>
-  <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
-  <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
-  <script type="text/javascript" src="js/json3.min.js"></script>
-  <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
-  <script type="text/javascript" src="js/moment.js"></script>
-  <script type="text/javascript" src="js/handlebars_1.0.js"></script>
-  <script type="text/javascript" src="js/underscore_1.4.4.js"></script>
-  <script type="text/javascript" src="js/myaccount_rest_1.4.js"></script>
-  <script type="text/javascript" src="js/myaccount.js"></script>
-  <script type="text/javascript" src="payment.js"></script>
-  <script type="text/javascript" src="//secure.ultracart.com/checkout/checkout-hosted-fields-1.0.js"></script>
-
-
-  <script type="text/template" id="payment-template">
-    <!-- the backbone view will wrap this content in an <article class="payment"></article> tag -->
-
-    <table class='payment-edit-table'>
+    <link href="css/styles.css" rel="stylesheet" media="all">
+    <!--[if lt IE 9]>
+    <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+    <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+    <script type="text/javascript" src="js/json3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+    <script type="text/javascript" src="js/underscore_1.4.4.js"></script>
+    <script type="text/javascript" src="js/myaccount_rest_1.4.js"></script>
+    <script type="text/javascript" src="js/myaccount.js"></script>
+    <script type="text/javascript" src="payment.js"></script>
+    <script type="text/javascript" src="//secure.ultracart.com/checkout/checkout-hosted-fields-1.0.js"></script>
 
 
-      <tr>
-        <td class='payment-label'>Card Type</td>
-        <td>
-          <select id="cardType">
-            <option disabled='disabled'>- Please select a card type -</option>
-            {{#ucSelectOption2 "Visa" cardType}}Visa{{/ucSelectOption2}}
-            {{#ucSelectOption2 "MasterCard" cardType}}MasterCard{{/ucSelectOption2}}
-            {{#ucSelectOption2 "Discover" cardType}}Discover{{/ucSelectOption2}}
-            {{#ucSelectOption2 "Diners Club" cardType}}Diner's Club{{/ucSelectOption2}}
-            {{#ucSelectOption2 "JCB" cardType}}JCB{{/ucSelectOption2}}
-            {{#ucSelectOption2 "AMEX" cardType}}American Express{{/ucSelectOption2}}
-          </select>
-          <input type="hidden" id="id" value="{{id}}"/>
-          <input type="hidden" id="merchantId" value="{{merchantId}}"/>
-          <input type="hidden" id="customerProfileId" value="{{customerProfileId}}"/>
-          <span class='red'>[required]</span>
-        </td>
-      </tr>
+    <script type="text/template" id="payment-template">
+        <!-- the backbone view will wrap this content in an <article class="payment"></article> tag -->
 
-      <tr>
-        <td class='payment-label'>Card Number</td>
-        <td>
-          <input type="text" id="cardNumber" value="{{cardNumber}}" size="30" maxlength="30"/>
-          <input type="hidden" id="creditCardNumberToken" value=""/>
-          <span class='red'>[required]</span>
-        </td>
-      </tr>
-      <tr>
-        <td>&nbsp;</td>
-        <td style='font-size:0.7em'>You do not need to re-enter your card number to make other changes.</td>
-      </tr>
+        <table class='payment-edit-table'>
 
 
-      <tr>
-        <td class='payment-label'>Expiration Date</td>
-        <td>
-          <select id="cardExpMonth">
-            {{#ucSelectOption2 "1" cardExpMonth}}01{{/ucSelectOption2}}
-            {{#ucSelectOption2 "2" cardExpMonth}}02{{/ucSelectOption2}}
-            {{#ucSelectOption2 "3" cardExpMonth}}03{{/ucSelectOption2}}
-            {{#ucSelectOption2 "4" cardExpMonth}}04{{/ucSelectOption2}}
-            {{#ucSelectOption2 "5" cardExpMonth}}05{{/ucSelectOption2}}
-            {{#ucSelectOption2 "6" cardExpMonth}}06{{/ucSelectOption2}}
-            {{#ucSelectOption2 "7" cardExpMonth}}07{{/ucSelectOption2}}
-            {{#ucSelectOption2 "8" cardExpMonth}}08{{/ucSelectOption2}}
-            {{#ucSelectOption2 "9" cardExpMonth}}09{{/ucSelectOption2}}
-            {{#ucSelectOption2 "10" cardExpMonth}}10{{/ucSelectOption2}}
-            {{#ucSelectOption2 "11" cardExpMonth}}11{{/ucSelectOption2}}
-            {{#ucSelectOption2 "12" cardExpMonth}}12{{/ucSelectOption2}}
-          </select> /
-          <select id="cardExpYear">
-            {{#each years}}
-            {{#ucSelectOption2 this ../cardExpYear}}{{this}}{{/ucSelectOption2}}
-            {{/each}}
-          </select>
-          <span class='red'>[required]</span>
-        </td>
-      </tr>
+            <tr>
+                <td class='payment-label'>Card Type</td>
+                <td>
+                    <select id="cardType">
+                        <option disabled='disabled'>- Please select a card type -</option>
+                        {{#ucSelectOption2 "Visa" cardType}}Visa{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "MasterCard" cardType}}MasterCard{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "Discover" cardType}}Discover{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "Diners Club" cardType}}Diner's Club{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "JCB" cardType}}JCB{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "AMEX" cardType}}American Express{{/ucSelectOption2}}
+                    </select>
+                    <input type="hidden" id="id" value="{{id}}"/>
+                    <input type="hidden" id="merchantId" value="{{merchantId}}"/>
+                    <input type="hidden" id="customerProfileId" value="{{customerProfileId}}"/>
+                    <span class='red'>[required]</span>
+                </td>
+            </tr>
 
-      <tr>
-        <td colspan='2'>
-          <input type="button" id="saveButton" value="Save Changes"/>
-          <input type="button" id="cancelButton" value="Cancel"/>
-        </td>
-      </tr>
-
-    </table>
+            <tr>
+                <td class='payment-label'>Card Number</td>
+                <td>
+                    <input type="text" id="cardNumber" value="{{cardNumber}}" size="30" maxlength="30"/>
+                    <input type="hidden" id="creditCardNumberToken" value=""/>
+                    <span class='red'>[required]</span>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td style='font-size:0.7em'>You do not need to re-enter your card number to make other changes.</td>
+            </tr>
 
 
-    <div style='clear:both'></div>
+            <tr>
+                <td class='payment-label'>Expiration Date</td>
+                <td>
+                    <select id="cardExpMonth">
+                        {{#ucSelectOption2 "1" cardExpMonth}}01{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "2" cardExpMonth}}02{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "3" cardExpMonth}}03{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "4" cardExpMonth}}04{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "5" cardExpMonth}}05{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "6" cardExpMonth}}06{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "7" cardExpMonth}}07{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "8" cardExpMonth}}08{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "9" cardExpMonth}}09{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "10" cardExpMonth}}10{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "11" cardExpMonth}}11{{/ucSelectOption2}}
+                        {{#ucSelectOption2 "12" cardExpMonth}}12{{/ucSelectOption2}}
+                    </select> /
+                    <select id="cardExpYear">
+                        {{#each years}}
+                        {{#ucSelectOption2 this ../cardExpYear}}{{this}}{{/ucSelectOption2}}
+                        {{/each}}
+                    </select>
+                    <span class='red'>[required]</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan='2'>
+                    <input type="button" id="saveButton" value="Save Changes"/>
+                    <input type="button" id="cancelButton" value="Cancel"/>
+                </td>
+            </tr>
+
+        </table>
 
 
-  </script>
+        <div style='clear:both'></div>
+
+
+    </script>
 
 </head>
 <body>
@@ -112,45 +112,46 @@
 <!-- The page header typically contains items such as your site heading, logo and possibly the main site navigation -->
 <!-- ARIA: the landmark role "banner" is set as it is the prime heading or internal title of the page -->
 <header role="banner">
-  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+    <img src='images/logo.png' alt='store logo' class='logo-image'/>
 
-  <h2>UltraCart Store</h2>
-  <h4><a href="index.html">My Account</a> &gt; <a href="payments.html">Payments</a> &gt; <span class='disabled-looking'>Edit Credit Card</span>
-  </h4>
+    <h2>UltraCart Store</h2>
+    <h4><a href="index.html">My Account</a> &gt; <a href="payments.html">Payments</a> &gt; <span
+            class='disabled-looking'>Edit Credit Card</span>
+    </h4>
 </header>
 
 <div class="wrap content">
-  <div>
-    <span class="info"></span>
-    <span class="success"></span>
-    <span class="warning"></span>
-    <span class="error"></span>
-  </div>
+    <div>
+        <span class="info"></span>
+        <span class="success"></span>
+        <span class="warning"></span>
+        <span class="error"></span>
+    </div>
 
-  <main role='main' id='payment'></main>
+    <main role='main' id='payment'></main>
 </div>
 
 
 <footer role="contentinfo">
-  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2015' is a date -->
-  <small>Copyright www.ultracart.com &copy;
-    <time datetime="2015">2015</time>
-  </small>
+    <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2015' is a date -->
+    <small>Copyright www.ultracart.com &copy;
+        <time datetime="2015">2015</time>
+    </small>
 </footer>
 
 <!-- Google Analytics - Optimized version by Mathias Bynens -->
 <!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
 <!-- Change the UA-XXXX-XX string to your site's ID -->
 <script type='text/javascript'>
-  var _gaq = [
-    ['_setAccount', 'UA-XXXX-XX'],
-    ['_trackPageview']
-  ];
-  (function (a, b) {
-    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
-    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
-    d.parentNode.insertBefore(c, d)
-  })(document, "script");
+    var _gaq = [
+        ['_setAccount', 'UA-XXXX-XX'],
+        ['_trackPageview']
+    ];
+    (function (a, b) {
+        var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+        c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+        d.parentNode.insertBefore(c, d)
+    })(document, "script");
 </script>
 
 </body>

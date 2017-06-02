@@ -1,189 +1,201 @@
+"use strict";
+var theDocument = jQuery(document);
+theDocument.ajaxSend(function (event, xhr) {
+
+    var cartId = getCookie('UltraCartShoppingCartID');
+    var merchantId = window.merchantId || getCookie('UltraCartMerchantID');
+
+    xhr.setRequestHeader("cache-control", "no-cache");
+    xhr.setRequestHeader("X-UC-Merchant-Id", merchantId);
+    xhr.setRequestHeader("X-UC-Shopping-Cart-Id", cartId);
+});
+
+
 var templates = {};
 
 function initialize() {
-  ultracart.myAccount.loggedIn({
-    success: function (settings) {
-      if (!settings) {
-        displayLoginForm();
-        jQuery('#recent-activity').html('');
-      } else {
-        displayWelcome(settings);
-        loadRecentOrders();
-      }
-    }
-  });
+    ultracart.myAccount.loggedIn({
+        success: function (settings) {
+            if (!settings) {
+                displayLoginForm();
+                jQuery('#recent-activity').html('');
+            } else {
+                displayWelcome(settings);
+                loadRecentOrders();
+            }
+        }
+    });
 }
 
 function displayLoginForm() {
-  enableButtons();
-  jQuery('.welcome-message').html('Welcome to your account management screen.  Please login below.');
-  jQuery('#login-form,#register-form').show();
+    enableButtons();
+    jQuery('.welcome-message').html('Welcome to your account management screen.  Please login below.');
+    jQuery('#login-form,#register-form').show();
 }
 
 function displayWelcome(settings) {
-  jQuery('.nav-logout').show();
-  jQuery('#login-form,#register-form').hide(); // might already be hidden.  that's okay.
+    jQuery('.nav-logout').show();
+    jQuery('#login-form,#register-form').hide(); // might already be hidden.  that's okay.
 
-  var template = "Welcome <strong>{{firstName}} {{lastName}}</strong> to your account management screen.";
-  var welcomeHB = Handlebars.compile(template);
-  var html = welcomeHB(settings);
-  jQuery('.welcome-message').html(html);
+    var template = "Welcome <strong>{{firstName}} {{lastName}}</strong> to your account management screen.";
+    var welcomeHB = Handlebars.compile(template);
+    var html = welcomeHB(settings);
+    jQuery('.welcome-message').html(html);
 
 }
 
 function emailPassword() {
-  clearAllMessages();
+    clearAllMessages();
 
-  var email = jQuery.trim(jQuery('#email').val());
+    var email = jQuery.trim(jQuery('#email').val());
 
-  if (!email) {
-    showError("Please enter your email to receive your password.");
-    return;
-  }
-
-  disableButtons();
-
-  //noinspection JSUnusedLocalSymbols
-  ultracart.myAccount.forgotPassword(email, {
-    success: function (account) {
-      enableButtons();
-      showInfo("Your password was emailed to you.  Please check your inbox.");
-
-    },
-    failure: function (textStatus, errorThrown) {
-      showError("We could not email your password to you at this time.  Please try again in a few minutes.");
-      enableButtons();
+    if (!email) {
+        showError("Please enter your email to receive your password.");
+        return;
     }
-  });
+
+    disableButtons();
+
+    //noinspection JSUnusedLocalSymbols
+    ultracart.myAccount.forgotPassword(email, {
+        success: function (account) {
+            enableButtons();
+            showInfo("Your password was emailed to you.  Please check your inbox.");
+
+        },
+        failure: function (textStatus, errorThrown) {
+            showError("We could not email your password to you at this time.  Please try again in a few minutes.");
+            enableButtons();
+        }
+    });
 
 
 }
 
 function disableButtons() {
-  jQuery('#login-button,#email-password-button,#register-button').attr('disabled', true);
+    jQuery('#login-button,#email-password-button,#register-button').attr('disabled', true);
 }
+
 function enableButtons() {
-  jQuery('#login-button,#email-password-button,#register-button').attr('disabled', false);
+    jQuery('#login-button,#email-password-button,#register-button').attr('disabled', false);
 }
 
 function login() {
-  clearAllMessages();
-  var email = jQuery.trim(jQuery('#email').val());
-  var password = jQuery.trim(jQuery('#password').val());
+    clearAllMessages();
+    var email = jQuery.trim(jQuery('#email').val());
+    var password = jQuery.trim(jQuery('#password').val());
 
-  if (!email || !password) {
-    showError("Both email and password are required to login.");
-    return;
-  }
-
-  disableButtons();
-
-
-  //noinspection JSUnusedLocalSymbols
-  ultracart.myAccount.login(email, password, {
-    success: function (account) {
-      enableButtons();
-      displayWelcome(account);
-      loadRecentOrders();
-
-    },
-    failure: function (textStatus, errorThrown) {
-      showError("Login failed.  Please check your credentials and try again.");
-      enableButtons();
+    if (!email || !password) {
+        showError("Both email and password are required to login.");
+        return;
     }
-  });
+
+    disableButtons();
+
+
+    //noinspection JSUnusedLocalSymbols
+    ultracart.myAccount.login(email, password, {
+        success: function (account) {
+            enableButtons();
+            displayWelcome(account);
+            loadRecentOrders();
+
+        },
+        failure: function (textStatus, errorThrown) {
+            showError("Login failed.  Please check your credentials and try again.");
+            enableButtons();
+        }
+    });
 }
 
 
 function register() {
-  clearAllMessages();
-  var email = jQuery.trim(jQuery('#register-email').val());
-  var password = jQuery.trim(jQuery('#register-password').val());
-  var passwordAgain = jQuery.trim(jQuery('#register-password-again').val());
+    clearAllMessages();
+    var email = jQuery.trim(jQuery('#register-email').val());
+    var password = jQuery.trim(jQuery('#register-password').val());
+    var passwordAgain = jQuery.trim(jQuery('#register-password-again').val());
 
-  var redirectUrl = null;
-  var redirectUrlEl = jQuery('#redirect-url');
-  if (redirectUrlEl) {
-    redirectUrl = redirectUrlEl.val();
-  } else {
-    redirectUrl = location.href;
-    redirectUrl += redirectUrl.indexOf('?') > -1 ? "&validated=true" : "?validated=true";
-  }
+    var redirectUrl = null;
+    var redirectUrlEl = jQuery('#redirect-url');
+    if (redirectUrlEl) {
+        redirectUrl = redirectUrlEl.val();
+    } else {
+        redirectUrl = location.href;
+        redirectUrl += redirectUrl.indexOf('?') > -1 ? "&validated=true" : "?validated=true";
+    }
 
-  var themeCode = null; // theme code is only useful for MyAccount portals hosted on the UltraCart, which this code base is not intended for.
-
-
-  if (!email || !password || !passwordAgain) {
-    showError("All fields are required to register.");
-    return false;
-  }
-
-  if (password !== passwordAgain) {
-    showError("Passwords do not match.  Please re-type your password in both fields.");
-    return false;
-  }
+    var themeCode = null; // theme code is only useful for MyAccount portals hosted on the UltraCart, which this code base is not intended for.
 
 
-  disableButtons();
+    if (!email || !password || !passwordAgain) {
+        showError("All fields are required to register.");
+        return false;
+    }
+
+    if (password !== passwordAgain) {
+        showError("Passwords do not match.  Please re-type your password in both fields.");
+        return false;
+    }
 
 
-  //noinspection JSUnusedLocalSymbols
-  var settings = {'email': email, 'password': password};
-  ultracart.myAccount.createAccount(settings, {
-    success: function (msg) {
+    disableButtons();
 
-      showInfo(msg);
-      enableButtons();
 
-    },
-    failure: function (jqXHR, textStatus) {
-      var message = jqXHR.getResponseHeader('UC-REST-ERROR');
-      if (!message) {
-        message = textStatus;
-      }
+    //noinspection JSUnusedLocalSymbols
+    var settings = {'email': email, 'password': password};
+    ultracart.myAccount.createAccount(settings, {
+        success: function (msg) {
 
-      showError("Registration failed with the following message: " + message);
-      enableButtons();
-    },
-    redirectUrl: redirectUrl,
-    themeCode: themeCode
-  });
+            showInfo(msg);
+            enableButtons();
+
+        },
+        failure: function (jqXHR, textStatus) {
+            var message = jqXHR.getResponseHeader('UC-REST-ERROR');
+            if (!message) {
+                message = textStatus;
+            }
+
+            showError("Registration failed with the following message: " + message);
+            enableButtons();
+        },
+        redirectUrl: redirectUrl,
+        themeCode: themeCode
+    });
 }
 
 
 function loadRecentOrders() {
-  //noinspection JSUnusedLocalSymbols
-  ultracart.myAccount.getOrders({
-    filter: 'last6months',
-    success: function (orders, pagination) {
-      var html = '<h4>Recent Activity</h4>No recent activity.';
-      if (orders && orders.length) {
-        var context = {'orders': orders};
-        html = templates.recentOrders(context);
-      }
-      jQuery('#recent-activity').html(html);
-    }
-  });
+    //noinspection JSUnusedLocalSymbols
+    ultracart.myAccount.getOrders({
+        filter: 'last6months',
+        success: function (orders, pagination) {
+            var html = '<h4>Recent Activity</h4>No recent activity.';
+            if (orders && orders.length) {
+                var context = {'orders': orders};
+                html = templates.recentOrders(context);
+            }
+            jQuery('#recent-activity').html(html);
+        }
+    });
 }
 
 
 jQuery(document).ready(function () {
-  enablePleaseWaitMessage();
+    enablePleaseWaitMessage();
 
-  templates.recentOrders = Handlebars.compile(jQuery('#recent-orders-template').html());
+    templates.recentOrders = Handlebars.compile(jQuery('#recent-orders-template').html());
 
-  initialize();
+    initialize();
 
-  jQuery('#login-button').bind('click', login);
-  jQuery('#register-button').bind('click', register);
-  jQuery('#email-password-button').bind('click', emailPassword);
+    jQuery('#login-button').bind('click', login);
+    jQuery('#register-button').bind('click', register);
+    jQuery('#email-password-button').bind('click', emailPassword);
 
-  // if you provide a custom redirect url, you'll probably want to que off something other than this parameter.
-  if(location.href.indexOf("validated=true") > -1){
-    showSuccess("Your email was validated.  Please login.");
-  }
-
-
+    // if you provide a custom redirect url, you'll probably want to que off something other than this parameter.
+    if (location.href.indexOf("validated=true") > -1) {
+        showSuccess("Your email was validated.  Please login.");
+    }
 
 
 });

@@ -1,172 +1,192 @@
 <!doctype html>
 <html lang="en"> <!-- Set this to the main language of your site -->
 <head>
-  <meta charset="utf-8">
-  <title>My Account</title>
-  <meta name="description" content="Manage Account Settings and View Order History">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>My Account</title>
+    <meta name="description" content="Manage Account Settings and View Order History">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="css/normalize.css" rel="stylesheet" media="all">
-  <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
-  <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
+    <link href="css/normalize.css" rel="stylesheet" media="all">
+    <!-- For legacy support (IE 6/7, Firefox < 4, and Safari < 5) use normalize-legacy.css instead -->
+    <!--<link href="css/normalize-legacy.css" rel="stylesheet" media="all">-->
 
-  <link href="css/styles.css" rel="stylesheet" media="all">
-  <!--[if lt IE 9]>
-  <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
-  <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
-  <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
-  <script type="text/javascript" src="js/moment.js"></script>
-  <script type="text/javascript" src="js/handlebars_1.0.js"></script>
-  <script type="text/javascript" src="js/myaccount_rest_1.4.js"></script>
-  <script type="text/javascript" src="js/myaccount.js"></script>
-  <script type="text/javascript" src="index_1.1.js"></script>
+    <link href="css/styles.css" rel="stylesheet" media="all">
+    <!--[if lt IE 9]>
+    <script type='text/javascript' src="js/html5shiv-printshiv.js" media="all"></script><![endif]-->
+    <script type="text/javascript" src="js/modernizr-2.6.2.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/handlebars_1.0.js"></script>
+    <script type="text/javascript" src="js/myaccount_rest_1.4.js"></script>
+    <script type="text/javascript" src="js/myaccount.js"></script>
+    <script type="text/javascript" src="index_1.1.js"></script>
 
-  <script type="text/template" id="recent-orders-template">
-    <h4>Recent Activity</h4>
-    <table class='recent-orders-table'>
-      <thead>
-      <tr>
-        <td>Order Date</td>
-        <td>Order ID</td>
-        <td>Total</td>
-        <td>Contents</td>
-      </tr>
-      </thead>
-      <tbody>
-      {{#each orders}}
-      <tr>
-        <td>{{dateFormat creationDate}}</td>
-        <td><a href="orders.html#order/{{orderId}}">{{orderId}}</a></td>
-        <td>{{totalFormatted}}</td>
-        <td>
-          <table>
-            {{#each items}}
+    <script type="text/template" id="recent-orders-template">
+        <h4>Recent Activity</h4>
+        <table class='recent-orders-table'>
+            <thead>
             <tr>
-              <td>
-                {{#with metaData}}{{#if defaultImageUrl}}<img class='order-item-thumbnail' src="https://secure.ultracart.com/thumbs/{{defaultImageUrl}}"
-                                                              alt=''/>{{/if}}{{/with}}
-              </td>
-              <td><a href="{{#with metaData}}{{viewUrl}}{{/with}}">{{description}}</a></td>
+                <td>Order Date</td>
+                <td>Order ID</td>
+                <td>Total</td>
+                <td>Contents</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each orders}}
+            <tr>
+                <td>{{dateFormat creationDate}}</td>
+                <td><a href="orders.html#order/{{orderId}}">{{orderId}}</a></td>
+                <td>{{totalFormatted}}</td>
+                <td>
+                    <table>
+                        {{#each items}}
+                        <tr>
+                            <td>
+                                {{#with metaData}}{{#if defaultImageUrl}}<img class='order-item-thumbnail'
+                                                                              src="https://secure.ultracart.com/thumbs/{{defaultImageUrl}}"
+                                                                              alt=''/>{{/if}}{{/with}}
+                            </td>
+                            <td><a href="{{#with metaData}}{{viewUrl}}{{/with}}">{{description}}</a></td>
+                        </tr>
+                        {{/each}}
+                    </table>
+                </td>
             </tr>
             {{/each}}
-          </table>
-        </td>
-      </tr>
-      {{/each}}
 
-      </tbody>
-    </table>
-  </script>
+            </tbody>
+        </table>
+    </script>
 
 </head>
 <body>
 
 <header role="banner">
-  <img src='images/logo.png' alt='store logo' class='logo-image'/>
+    <img src='images/logo.png' alt='store logo' class='logo-image'/>
 
-  <h2>UltraCart Store - My Account</h2>
-  <nav role="navigation"></nav>
+    <h2>UltraCart Store - My Account</h2>
+    <nav role="navigation"></nav>
 
 </header>
 
 <div class="wrap content">
 
-  <main role="main">
+    <main role="main">
 
-    <section>
+        <section>
 
-      <header>
-        <nav role="navigation">
-          <ul>
-            <li class='nav-password'><a href="password.html" class='nav-link'>Password</a> Change my Password</li>
-            <li class='nav-orders'><a href="orders.html" class='nav-link'>Orders</a> View my orders, leave feedback, return products</li>
-            <li class='nav-payments'><a href="payments.html" class='nav-link'>Payments</a> View and manage my credit cards</li>
-            <li class='nav-billing'><a href="billing.html" class='nav-link'>Billing Addresses</a> View and manage my billing addresses</li>
-            <li class='nav-shipping'><a href="shipping.html" class='nav-link'>Shipping Addresses</a> View and manage my shipping addresses</li>
-            <li class='nav-settings'><a href="settings.html" class='nav-link'>Settings</a> Change Account Settings</li>
-            <li class='nav-reviews'><a href="reviews.html" class='nav-link'>Reviews</a> View product reviews I've made and write new ones</li>
-            <li class='nav-wishlist'><a href="wishlist.html" class='nav-link'>Wishlist</a> View and manage my wishlist</li>
-            <li class='nav-logout'><a href="#logout" class='nav-link'>Logout</a> Sign out of your account</li>
-          </ul>
-        </nav>
-      </header>
+            <header>
+                <nav role="navigation">
+                    <ul>
+                        <li class='nav-password'><a href="password.html" class='nav-link'>Password</a> Change my
+                            Password
+                        </li>
+                        <li class='nav-orders'><a href="orders.html" class='nav-link'>Orders</a> View my orders, leave
+                            feedback, return products
+                        </li>
+                        <li class='nav-payments'><a href="payments.html" class='nav-link'>Payments</a> View and manage
+                            my credit cards
+                        </li>
+                        <li class='nav-billing'><a href="billing.html" class='nav-link'>Billing Addresses</a> View and
+                            manage my billing addresses
+                        </li>
+                        <li class='nav-shipping'><a href="shipping.html" class='nav-link'>Shipping Addresses</a> View
+                            and manage my shipping addresses
+                        </li>
+                        <li class='nav-settings'><a href="settings.html" class='nav-link'>Settings</a> Change Account
+                            Settings
+                        </li>
+                        <li class='nav-reviews'><a href="reviews.html" class='nav-link'>Reviews</a> View product reviews
+                            I've made and write new ones
+                        </li>
+                        <li class='nav-wishlist'><a href="wishlist.html" class='nav-link'>Wishlist</a> View and manage
+                            my wishlist
+                        </li>
+                        <li class='nav-logout'><a href="#logout" class='nav-link'>Logout</a> Sign out of your account
+                        </li>
+                    </ul>
+                </nav>
+            </header>
 
-      <article id="introduction">
+            <article id="introduction">
 
-        <h3>Introduction</h3>
+                <h3>Introduction</h3>
 
-        <p class='welcome-message'>Welcome to your account management screen. Please login below.</p>
+                <p class='welcome-message'>Welcome to your account management screen. Please login below.</p>
 
-        <div>
-          <span class="info"></span>
-          <span class="success"></span>
-          <span class="warning"></span>
-          <span class="error"></span>
-        </div>
+                <div>
+                    <span class="info"></span>
+                    <span class="success"></span>
+                    <span class="warning"></span>
+                    <span class="error"></span>
+                </div>
 
-        <form id='login-form'>
-          <strong>Login</strong> to access your account
-          <div class='login-form-row'><label for="email">Email Address:</label>
-            <input type="text" id="email" size="30" class='login-field'/>
-          </div>
-          <div class='login-form-row'><label for="password">Password:</label>
-            <input type="password" id="password" size="30" class='login-field'/>
-          </div>
-          <div class='login-form-row'>
-            <button type="submit" value="Login" id="login-button" class='login-button'>Login</button>
-            <input type="button" value="Email Password" id="email-password-button" class='login-button'>Email Password</button>
-          </div>
-        </form>
-        <form id='register-form'>
-          <strong>Register</strong> to create a new Account
-          <div class='register-form-row'><label for="email">Email Address:</label>
-            <input type="text" id="register-email" size="30" class='register-field'/>
-            <!-- override the default redirect url (this same page) by populating this value.  any url put here must be in your list (secure.ultracart.com->Home->Customer Profiles->) -->
-            <!-- if you override this value, you'll probably need to adjust the jQuery.ready at the bottom of index_X.X.js, unless you have ?validated=true in your url as a que to display a success message. -->
-            <input type='hidden' id='redirect-url' value=''/>
-          </div>
-          <div class='register-form-row'><label for="password">Password:</label>
-            <input type="password" id="register-password" size="30" class='register-field'/>
-          </div>
-          <div class='register-form-row'><label for="password">Password Again:</label>
-            <input type="password" id="register-password-again" size="30" class='register-field'/>
-          </div>
-          <div class='register-form-row'>
-            <button type="submit" value="Register" id="register-button" class='register-button'>Register</button>
-          </div>
-        </form>
-        <div style='clear:both'></div>
+                <form id='login-form'>
+                    <strong>Login</strong> to access your account
+                    <div class='login-form-row'><label for="email">Email Address:</label>
+                        <input type="text" id="email" size="30" class='login-field'/>
+                    </div>
+                    <div class='login-form-row'><label for="password">Password:</label>
+                        <input type="password" id="password" size="30" class='login-field'/>
+                    </div>
+                    <div class='login-form-row'>
+                        <button type="submit" value="Login" id="login-button" class='login-button'>Login</button>
+                        <input type="button" value="Email Password" id="email-password-button" class='login-button'>Email
+                        Password</button>
+                    </div>
+                </form>
+                <form id='register-form'>
+                    <strong>Register</strong> to create a new Account
+                    <div class='register-form-row'><label for="email">Email Address:</label>
+                        <input type="text" id="register-email" size="30" class='register-field'/>
+                        <!-- override the default redirect url (this same page) by populating this value.  any url put here must be in your list (secure.ultracart.com->Home->Customer Profiles->) -->
+                        <!-- if you override this value, you'll probably need to adjust the jQuery.ready at the bottom of index_X.X.js, unless you have ?validated=true in your url as a que to display a success message. -->
+                        <input type='hidden' id='redirect-url' value=''/>
+                    </div>
+                    <div class='register-form-row'><label for="password">Password:</label>
+                        <input type="password" id="register-password" size="30" class='register-field'/>
+                    </div>
+                    <div class='register-form-row'><label for="password">Password Again:</label>
+                        <input type="password" id="register-password-again" size="30" class='register-field'/>
+                    </div>
+                    <div class='register-form-row'>
+                        <button type="submit" value="Register" id="register-button" class='register-button'>Register
+                        </button>
+                    </div>
+                </form>
+                <div style='clear:both'></div>
 
-        <div id='recent-activity'></div>
+                <div id='recent-activity'></div>
 
-      </article>
+            </article>
 
-    </section>
+        </section>
 
-  </main>
+    </main>
 </div>
 
 
 <footer role="contentinfo">
-  <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2015' is a date -->
-  <small>Copyright www.ultracart.com &copy;
-    <time datetime="2015">2015</time>
-  </small>
+    <!-- Copyright information can be contained within the <small> element. The <time> element is used here to indicate that the '2015' is a date -->
+    <small>Copyright www.ultracart.com &copy;
+        <time datetime="2015">2015</time>
+    </small>
 </footer>
 
 <!-- Google Analytics - Optimized version by Mathias Bynens -->
 <!-- See: http://mathiasbynens.be/notes/async-analytics-snippet -->
 <!-- Change the UA-XXXX-XX string to your site's ID -->
 <script type='text/javascript'>
-  var _gaq = [
-    ['_setAccount', 'UA-XXXX-XX'],
-    ['_trackPageview']
-  ];
-  (function (a, b) {
-    var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
-    c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
-    d.parentNode.insertBefore(c, d)
-  })(document, "script");
+    var _gaq = [
+        ['_setAccount', 'UA-XXXX-XX'],
+        ['_trackPageview']
+    ];
+    (function (a, b) {
+        var c = a.createElement(b), d = a.getElementsByTagName(b)[0];
+        c.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+        d.parentNode.insertBefore(c, d)
+    })(document, "script");
 </script>
 
 </body>
